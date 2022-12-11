@@ -1,9 +1,12 @@
 import java.net.ServerSocket;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.DataInputStream;
 
 import java.net.Socket;
+import java.util.HashSet;
 import java.util.Scanner;
+import java.util.Set;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
@@ -17,6 +20,7 @@ public class Client implements Serializable{
     private DataOutputStream dout;
     private Socket s;
     public Client(){
+
 
     }
 
@@ -33,30 +37,37 @@ public class Client implements Serializable{
         try{
             Socket s=new Socket("localhost",6666);
             DataInputStream dis = new DataInputStream(s.getInputStream());
-            
+            DataOutputStream dout=new DataOutputStream(s.getOutputStream());
+            ois = new ObjectInputStream(s.getInputStream());
             
             System.out.println(dis.readUTF());
             Scanner sc = new Scanner(System.in);
             
+            /*
             ObjectOutputStream oos = new ObjectOutputStream(s.getOutputStream());
             oos.writeObject(this);
             oos.flush();
+            this.setNomClient("mzamzm");
+            */
 
             /*ois = new ObjectInputStream(s.getInputStream());*/
 
-            choisirNom(sc, s, dis);
-            for(int i=0; i<1000000; i++){
-                System.out.println("Bonjour "+this.getNomClient());
-
-            }
-            
+            choisirNom(sc, s, dis, dout);
+            ClientReader cr = new ClientReader(this, s);
+            cr.start();
             while(true){
+                System.out.println("Bienvenue dans la messagerie vous pouvez ecrire vos messages /salon changer salon");
                 String message = sc.nextLine();
                 dout.writeUTF(message);
                 dout.flush();
                 if (message.equals("/quit")){
                     System.out.println("Au revoir "+this.nomClient);
                     break;
+                }
+                else if (message.equals("/salon")){
+                    cr.wait();
+                    changerSalon(ois, sc, dout);
+                    cr.notify();
                 }
             }
             
@@ -66,11 +77,11 @@ public class Client implements Serializable{
         catch(Exception e){System.out.println(e);}
         }
 
-        public void choisirNom(Scanner sc, Socket s, DataInputStream dis){
+        public void choisirNom(Scanner sc, Socket s, DataInputStream dis, DataOutputStream dout){
             
             try{
                 Boolean nomEstChoisi = false;
-                DataOutputStream dout=new DataOutputStream(s.getOutputStream());
+               
                 
                 String name = null;
                 while(! nomEstChoisi){
@@ -80,6 +91,7 @@ public class Client implements Serializable{
                     nomEstChoisi = (Boolean) dis.readBoolean();
                     if(nomEstChoisi){
                         System.out.println(name+"!!! Ca sonne bien !"); 
+                        this.setNomClient(name);
                     }
                     else{
                         System.out.println("malheureusement "+name+" est déjà utilisé");
@@ -91,6 +103,26 @@ public class Client implements Serializable{
             }
             catch(Exception e){System.out.println(e);}
         }
+    public void changerSalon(ObjectInputStream ois, Scanner sc, DataOutputStream dout){
+        System.out.println("Veuillez choisir un salon parmis la liste suivante : ");
+        try {
+            HashSet<String> listeSal = (HashSet<String>)ois.readObject();
+            System.out.println(listeSal);
+            String nomSallon = sc.nextLine();
+            dout.writeUTF(nomSallon);
+            System.out.println("Bienvenue dans le sallon "+nomSallon);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+
+
+        
+
+
     }
+
+}
 
 
