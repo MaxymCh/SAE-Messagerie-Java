@@ -1,10 +1,15 @@
 import java.net.Socket;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -16,17 +21,29 @@ public class Session extends Thread {
     private Serveur serv;
     private DataInputStream dis;
     private DataOutputStream dos;
+    private BufferedReader reader;
     public Session( Socket sock, Serveur serv){
         this.sock = sock;
         this.serv = serv;
+        try{
+            InputStream input = sock.getInputStream();
+            reader = new BufferedReader(new InputStreamReader(input));
+
+            }
+            catch(Exception e){
+                System.out.println("Erreur : "+e);
+            }
     }
+
     @Override
     public void run(){
         try{
+            /*
             this.dis = new DataInputStream(this.sock.getInputStream());
-            ObjectOutputStream oos = new ObjectOutputStream(this.sock.getOutputStream());
+            
             this.dos = new DataOutputStream(this.sock.getOutputStream());
-            this.dos.writeUTF("Bonjour, bienvenue");
+            */
+            ObjectOutputStream oos = new ObjectOutputStream(this.sock.getOutputStream());
             /*
             
             System.out.println("1");
@@ -42,12 +59,11 @@ public class Session extends Thread {
             */
             /*this.client = (Client)ob;*/
             choisirNom(this.dis);
-
             String str;
             
             while(true){
                 
-                str = (String)dis.readUTF();
+                str = this.reader.readLine();
                 System.out.println("message "+str);
                 if (str.equals("/quit")){
                     break;
@@ -79,11 +95,13 @@ public class Session extends Thread {
                 nomValide = true;
                 /*this.client.setNomClient(nomChoisi);*/
                 this.dos.writeBoolean(true);
+                this.dos.writeUTF(nomChoisi);
                 this.nomClient = nomChoisi;
             }
             
             else{
                 this.dos.writeBoolean(false);
+                this.dos.writeUTF(nomChoisi);
             }
         }
     }
@@ -91,6 +109,7 @@ public class Session extends Thread {
 }
 
     public void changerSalon(ObjectOutputStream oos){
+        
         try {
             oos.writeObject(this.serv.getListeSalon());
             String nomSallon = this.dis.readUTF();
@@ -99,6 +118,7 @@ public class Session extends Thread {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        
     }
 
     public String getSallonActuelle(){

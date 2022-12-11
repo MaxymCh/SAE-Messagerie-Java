@@ -19,6 +19,7 @@ public class Client implements Serializable{
     private DataInputStream dis;
     private DataOutputStream dout;
     private Socket s;
+    private String nomEncours;
     public Client(){
 
 
@@ -32,15 +33,14 @@ public class Client implements Serializable{
         this.nomClient = nomC;
     }
     public void mainSession(){
-        ObjectInputStream ois = null;
         
         try{
             Socket s=new Socket("localhost",6666);
             DataInputStream dis = new DataInputStream(s.getInputStream());
             DataOutputStream dout=new DataOutputStream(s.getOutputStream());
-            ois = new ObjectInputStream(s.getInputStream());
+
             
-            System.out.println(dis.readUTF());
+            System.out.println("Bonjour et bienvenue");
             Scanner sc = new Scanner(System.in);
             
             /*
@@ -50,11 +50,17 @@ public class Client implements Serializable{
             this.setNomClient("mzamzm");
             */
 
-            /*ois = new ObjectInputStream(s.getInputStream());*/
+            /*ois = new ObjectInputStream(s.getInputStream());
 
-            choisirNom(sc, s, dis, dout);
+            choisirNom(sc, s, dis, dout);*/
+
+            ClientWriter cw = new ClientWriter(this, s);
             ClientReader cr = new ClientReader(this, s);
+            cw.start(); 
             cr.start();
+            cw.join();
+            cr.join();
+                      /*
             while(true){
                 System.out.println("Bienvenue dans la messagerie vous pouvez ecrire vos messages /salon changer salon");
                 String message = sc.nextLine();
@@ -65,17 +71,20 @@ public class Client implements Serializable{
                     break;
                 }
                 else if (message.equals("/salon")){
-                    cr.wait();
                     changerSalon(ois, sc, dout);
-                    cr.notify();
-                }
+            }
             }
             
             dout.close();
             s.close();
         }
+         
+        */
+        }
         catch(Exception e){System.out.println(e);}
         }
+        
+    
 
         public void choisirNom(Scanner sc, Socket s, DataInputStream dis, DataOutputStream dout){
             
@@ -96,7 +105,8 @@ public class Client implements Serializable{
                     else{
                         System.out.println("malheureusement "+name+" est déjà utilisé");
                     }
-                    
+                    dout.close();
+                    dis.close();
                 
                 }
                 
@@ -123,6 +133,17 @@ public class Client implements Serializable{
 
     }
 
+    public void setNomEncours(String n){
+        this.nomEncours = n;
+    }
+
+    public void setNomFinal(){
+        this.nomClient = this.nomEncours;
+    }
+
+    public void choisirNom(){
+        
+    }
 }
 
 

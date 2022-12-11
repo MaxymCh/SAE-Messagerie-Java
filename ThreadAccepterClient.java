@@ -7,16 +7,18 @@ public class ThreadAccepterClient extends Thread{
     private ServerSocket ss;
     private List<Session> sessions;
     private Serveur serv;
+    
     public ThreadAccepterClient(ServerSocket ss, Serveur serv){
         this.ss = ss;
         this.sessions = new ArrayList<>();
         this.serv  = serv;
+        
     }
     @Override
     public void run(){
         try{
 
-            while (true){
+            while(true){
                 Socket sock = ss.accept();
                 Session cl = new Session(sock, this.serv);
                 cl.start();
@@ -31,4 +33,6 @@ public class ThreadAccepterClient extends Thread{
     public List<Session> getSessions(){
         return this.sessions;
     }
+
+    
 }
