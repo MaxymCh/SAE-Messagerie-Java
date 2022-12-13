@@ -52,13 +52,13 @@ public class Session extends Thread {
                 if (str.equals("/quit")){
                     break;
                 }
-                /*
+                
                 else if (str.equals("/salon")){
-                    changerSalon(oos);
+                    changerSalon(dos);
                 }
-                */
+                
                 else{
-                    this.serv.envoyerMessage(this, str);
+                    this.serv.envoyerMessageSallon(this, str);
                 }
             }
         }
@@ -92,9 +92,10 @@ public class Session extends Thread {
     catch(Exception e){System.out.println(e);}
 }
 
-    public void changerSalon(ObjectOutputStream oos){
+    public void changerSalon(DataOutputStream dos){
         try {
-            oos.writeObject(this.serv.getListeSalon());
+            dos.writeUTF("Veuillez choisir un salon parmis la liste suivante : ");
+            dos.writeUTF(this.serv.getListeSalon().toString());
             String nomSallon = this.dis.readUTF();
             this.serv.changerSalon(this, nomSallon);
         } catch (Exception e) {

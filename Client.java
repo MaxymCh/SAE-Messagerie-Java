@@ -64,13 +64,11 @@ public class Client implements Serializable{
                     System.out.println("Au revoir "+this.nomClient);
                     break;
                 }
-                /*               else if (message.equals("/salon")){
-                    cr.wait();
-                    cr.notify();
-                    changerSalon(ois, sc, dout);
+                else if (message.equals("/salon")){
+                    changerSalon(dis, sc, dout);
                     
                 }
-                */
+                
             }
             
             dout.close();
@@ -105,11 +103,8 @@ public class Client implements Serializable{
             }
             catch(Exception e){System.out.println(e);}
         }
-    public void changerSalon(ObjectInputStream ois, Scanner sc, DataOutputStream dout){
-        System.out.println("Veuillez choisir un salon parmis la liste suivante : ");
+    public void changerSalon(DataInputStream ois, Scanner sc, DataOutputStream dout){
         try {
-            HashSet<String> listeSal = (HashSet<String>)ois.readObject();
-            System.out.println(listeSal);
             String nomSallon = sc.nextLine();
             dout.writeUTF(nomSallon);
             System.out.println("Bienvenue dans le sallon "+nomSallon);
