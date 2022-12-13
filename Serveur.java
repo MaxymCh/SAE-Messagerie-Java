@@ -63,12 +63,23 @@ class Serveur{
 
     }
 
+    /*
     public void envoyerMessageSallon(Session sessionEnvoyer,String message){
         for (Session sessionExistante : this.tac.getSessions()){
             if(this.listeSalon.get(sessionEnvoyer.getSallonActuelle()).contains(sessionExistante.getNomClient())){
                 if(!sessionExistante.getNomClient().equals(sessionEnvoyer.getNomClient())){
                     sessionExistante.envoyerMessageClient(sessionEnvoyer.getNomClient(),message);
                 }
+            }
+        }
+
+
+    }
+    */
+    public void envoyerMessage(Session sessionEnvoyer,String message){
+        for (Session sessionExistante : this.tac.getSessions()){
+            if(!sessionExistante.getNomClient().equals(sessionEnvoyer.getNomClient())){
+                sessionExistante.envoyerMessageClient(sessionEnvoyer.getNomClient(),message);
             }
         }
 

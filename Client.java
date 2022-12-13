@@ -64,11 +64,13 @@ public class Client implements Serializable{
                     System.out.println("Au revoir "+this.nomClient);
                     break;
                 }
-                else if (message.equals("/salon")){
+                /*               else if (message.equals("/salon")){
                     cr.wait();
-                    changerSalon(ois, sc, dout);
                     cr.notify();
+                    changerSalon(ois, sc, dout);
+                    
                 }
+                */
             }
             
             dout.close();

@@ -52,11 +52,13 @@ public class Session extends Thread {
                 if (str.equals("/quit")){
                     break;
                 }
+                /*
                 else if (str.equals("/salon")){
                     changerSalon(oos);
                 }
+                */
                 else{
-
+                    this.serv.envoyerMessage(this, str);
                 }
             }
         }
@@ -113,9 +115,11 @@ public class Session extends Thread {
         try{
             PrintWriter writer;
             try {
-                OutputStream output = this.sock.getOutputStream();
+                DataOutputStream output = new DataOutputStream(this.sock.getOutputStream());
+                output.writeUTF(mes);
+                /*
                 writer = new PrintWriter(output, true);
-                writer.println(mes);
+                writer.println(mes);*/
             } catch (IOException ex) {
                 System.out.println("Error getting output stream: " + ex.getMessage());
                 ex.printStackTrace();
