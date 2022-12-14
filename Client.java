@@ -24,6 +24,10 @@ public class Client implements Serializable{
 
     }
 
+    public Socket getSocket(){
+        return this.s;
+    }
+
     public String getNomClient(){
         return this.nomClient;
     }
@@ -35,7 +39,7 @@ public class Client implements Serializable{
         ObjectInputStream ois = null;
         
         try{
-            Socket s=new Socket("localhost",6666);
+            this.s=new Socket("localhost",6666);
             DataInputStream dis = new DataInputStream(s.getInputStream());
             DataOutputStream dout=new DataOutputStream(s.getOutputStream());
             ois = new ObjectInputStream(s.getInputStream());
@@ -53,14 +57,17 @@ public class Client implements Serializable{
             /*ois = new ObjectInputStream(s.getInputStream());*/
 
             choisirNom(sc, s, dis, dout);
+            
             ClientReader cr = new ClientReader(this, s);
             cr.start();
+            changerSalon(dis, sc, dout);
             while(true){
-                System.out.println("Bienvenue dans la messagerie vous pouvez ecrire vos messages /salon changer salon");
+                System.out.println("Vous pouvez ecrire vos messages /salon changer salon");
                 String message = sc.nextLine();
                 dout.writeUTF(message);
                 dout.flush();
                 if (message.equals("/quit")){
+                    cr.stop_thread();
                     System.out.println("Au revoir "+this.nomClient);
                     break;
                 }
@@ -68,12 +75,14 @@ public class Client implements Serializable{
                     changerSalon(dis, sc, dout);
                     
                 }
+
                 
             }
-            
+            Thread.sleep(1000);
             dout.close();
             s.close();
         }
+
         catch(Exception e){System.out.println(e);}
         }
 
@@ -107,7 +116,7 @@ public class Client implements Serializable{
         try {
             String nomSallon = sc.nextLine();
             dout.writeUTF(nomSallon);
-            System.out.println("Bienvenue dans le sallon "+nomSallon);
+            
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

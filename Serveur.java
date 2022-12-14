@@ -14,6 +14,8 @@ class Serveur{
     public Socket socket;
     private ThreadAccepterClient tac;
     private HashMap<String, ArrayList<String>> listeSalon;
+    private HashSet<String> listeClient;
+    private long tempCreationServeur;
     public Serveur(int port){
         this.compteur = 0;
         this.port = port;
@@ -22,14 +24,29 @@ class Serveur{
         this.listeSalon.put("Salon 2", new ArrayList<>());
         this.listeSalon.put("Salon 3", new ArrayList<>());
         this.listeSalon.put("Salon 4", new ArrayList<>());
+        this.tempCreationServeur = System.currentTimeMillis();
+        this.listeClient = new HashSet<>();
     }
 
-    public HashSet<String> getListeSalon(){
-        HashSet<String> ensembleSalon = new HashSet<>();
-        for (String nomS : this.listeSalon.keySet()){
-            ensembleSalon.add(nomS);
-        }
-        return ensembleSalon;
+    public Set<String> getListeSalon(){
+        return this.listeSalon.keySet();
+    }
+
+    public long getTempsDepuisCreation(){
+        return System.currentTimeMillis() - this.tempCreationServeur;
+    }
+    public void retirerClientSalon(Session s){
+        this.listeSalon.get(s.getSallonActuelle()).remove(s.getNomClient());
+    }
+
+    public void ajouterSession(Session s){
+        this.tac.addSessions(s);
+        this.listeClient.add(s.getNomClient());
+    }
+
+    public void removeSession(Session s){
+        this.tac.removeSessions(s);
+        this.listeClient.remove(s.getNomClient());
     }
 
     public void mainServer(){
@@ -55,15 +72,26 @@ class Serveur{
         if (session.getSallonActuelle() != null){
             this.listeSalon.get(session.getSallonActuelle()).remove(session.getNomClient());
         }
-        session.setSallonActuelle(nouveauSallon);
-        this.listeSalon.get(nouveauSallon).add(session.getNomClient());
-        System.out.println(this.listeSalon);
-
-
-
+        if(this.listeSalon.containsKey(nouveauSallon)){
+            session.setSallonActuelle(nouveauSallon);
+            this.listeSalon.get(nouveauSallon).add(session.getNomClient());
+            System.out.println(this.listeSalon);
+            session.envoyerMessageClient("Serveur", "Bienvenue dans le sallon "+nouveauSallon);
+        }
+        else{
+            session.envoyerMessageClient("Serveur", "Le salon n'existe pas");
+        }
+    
     }
 
-    
+    public int getNombreUser(){
+        return this.tac.getSessions().size();
+    }
+
+    public String getListeClient(){
+        String listeClient = this.listeClient.toString();
+        return listeClient;
+    }
     public void envoyerMessageSallon(Session sessionEnvoyer,String message){
         for (Session sessionExistante : this.tac.getSessions()){
             if(this.listeSalon.get(sessionEnvoyer.getSallonActuelle()).contains(sessionExistante.getNomClient())){

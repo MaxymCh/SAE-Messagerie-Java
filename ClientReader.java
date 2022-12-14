@@ -8,17 +8,22 @@ import java.net.Socket;
 public class ClientReader extends Thread{
     private Client client;
     private Socket socket;
+    private boolean clientLance;
 
     public ClientReader( Client client, Socket socket){
         this.client = client;
         this.socket = socket;
+        this.clientLance = true;
 
     }
 
+    public void stop_thread(){
+        this.clientLance = false;
+    }
     public void run(){
         try{
             DataInputStream dis = new DataInputStream(this.socket.getInputStream());
-            while(true){
+            while(this.clientLance){
                 String mes = dis.readUTF();
                 System.out.println(mes);
                 /*

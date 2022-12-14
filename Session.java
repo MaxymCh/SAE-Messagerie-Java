@@ -42,20 +42,44 @@ public class Session extends Thread {
             */
             /*this.client = (Client)ob;*/
             choisirNom(this.dis);
-
+            this.serv.ajouterSession(this);
             String str;
+            changerSalon(dos);
             
             while(true){
                 
                 str = (String)dis.readUTF();
                 System.out.println("message "+str);
                 if (str.equals("/quit")){
+                    this.dos.writeUTF("Merci et à bientot");
+                    this.serv.removeSession(this);
+                    if(this.salonActuelle!=null){
+                        this.serv.retirerClientSalon(this);
+                    }
                     break;
                 }
                 
                 else if (str.equals("/salon")){
                     changerSalon(dos);
                 }
+                else if(str.equals("/nbuser")){
+                    int nombreUser = this.serv.getNombreUser();
+                    this.dos.writeUTF("Il y a actuellement "+String.valueOf(nombreUser)+" client enregistré");
+                    
+                }
+                else if(str.equals("/uptime")){
+                    long tempsCreation = this.serv.getTempsDepuisCreation()/1000;
+                    this.dos.writeUTF("Le serveur est lancé depuis  "+String.valueOf(tempsCreation)+" secondes");
+                    
+                }
+
+                else if(str.equals("/users")){
+                    String listeUser = this.serv.getListeClient();
+                    this.dos.writeUTF("La liste des clients actuellement connecté est "+listeUser);
+                    
+                }
+                
+                
                 
                 else{
                     this.serv.envoyerMessageSallon(this, str);
@@ -133,5 +157,19 @@ public class Session extends Thread {
         }
         
     }
-    
+
+    @Override
+    public boolean equals(Object o){
+        if(this == o){
+            return true;
+        }
+        if(o instanceof Session){
+            Session s2 = (Session)o;
+            if(this.getNomClient().equals(s2.getNomClient())){
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

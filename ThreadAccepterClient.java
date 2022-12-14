@@ -20,7 +20,6 @@ public class ThreadAccepterClient extends Thread{
                 Socket sock = ss.accept();
                 Session cl = new Session(sock, this.serv);
                 cl.start();
-                this.sessions.add(cl);
             }
         } 
         catch(Exception e){
@@ -30,5 +29,13 @@ public class ThreadAccepterClient extends Thread{
 
     public List<Session> getSessions(){
         return this.sessions;
+    }
+
+    public void addSessions(Session s){
+        this.sessions.add(s);
+    }
+
+    public void removeSessions(Session s){
+        this.sessions.remove(s);
     }
 }
