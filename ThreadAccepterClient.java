@@ -1,15 +1,14 @@
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 public class ThreadAccepterClient extends Thread{
     private ServerSocket ss;
-    private List<Session> sessions;
+    private HashMap<String, Session> dicoPseudoSession;
     private Serveur serv;
     public ThreadAccepterClient(ServerSocket ss, Serveur serv){
         this.ss = ss;
-        this.sessions = new ArrayList<>();
+        this.dicoPseudoSession = new HashMap<>();
         this.serv  = serv;
     }
     @Override
@@ -27,15 +26,15 @@ public class ThreadAccepterClient extends Thread{
         }
     }
 
-    public List<Session> getSessions(){
-        return this.sessions;
+    public HashMap<String, Session> getDicoSession(){
+        return this.dicoPseudoSession;
     }
 
-    public void addSessions(Session s){
-        this.sessions.add(s);
+    public void addSessions(Session s, String nom){
+        this.dicoPseudoSession.put(nom, s);
     }
 
-    public void removeSessions(Session s){
-        this.sessions.remove(s);
+    public void removeSessions(String nom){
+        this.dicoPseudoSession.remove(nom);
     }
 }

@@ -1,8 +1,4 @@
-import java.io.BufferedReader;
-import java.io.DataInput;
 import java.io.DataInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.Socket;
 
 public class ClientReader extends Thread{
@@ -23,12 +19,22 @@ public class ClientReader extends Thread{
     public void run(){
         try{
             DataInputStream dis = new DataInputStream(this.socket.getInputStream());
+            String mes;
             while(this.clientLance){
-                String mes = dis.readUTF();
+                mes = dis.readUTF();
+                if(mes.equals("true")){
+                    mes = dis.readUTF();
+                    this.client.setNomClient(mes);
+                    break;
+                }
+                else{
+                    System.out.println(mes);
+                }               
+            }
+
+            while(this.clientLance){
+                mes = dis.readUTF();
                 System.out.println(mes);
-                /*
-                String response = reader.readLine();
-                System.out.println(response	);*/
             }
         }
         catch(Exception e){
