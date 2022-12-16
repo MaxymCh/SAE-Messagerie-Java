@@ -1,5 +1,7 @@
 # SAE-Messagerie-Java
 
+# Charpentier Maxym
+# Jory Jonathan
 # Il suffit de lancer la classe Lancer serveur pour lancer un serveur
 # Puis lancer client pour lancr un client 
 # Ensuite un nom nous est demandé 
