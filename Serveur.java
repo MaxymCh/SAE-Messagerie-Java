@@ -8,8 +8,8 @@ import java.util.Set;
 class Serveur{
     private int port;
     public Socket socket;
-    private ThreadAccepterClient tac;
     private HashMap<String, ArrayList<String>> listeSalon;
+    private HashMap<String, Session> dicoPseudoSession;
     private long tempCreationServeur;
     public Serveur(int port){
         this.port = port;
@@ -19,6 +19,7 @@ class Serveur{
         this.listeSalon.put("Salon3", new ArrayList<>());
         this.listeSalon.put("Salon4", new ArrayList<>());
         this.tempCreationServeur = System.currentTimeMillis();
+        this.dicoPseudoSession = new HashMap<>();
     }
 
     public Set<String> getListeSalon(){
@@ -33,18 +34,21 @@ class Serveur{
     }
 
     public void ajouterSession(Session s, String nom){
-        this.tac.addSessions(s, nom);
+        this.dicoPseudoSession.put(nom, s);
     }
 
     public void removeSession(String nom){
-        this.tac.removeSessions(nom);
+        this.dicoPseudoSession.remove(nom);
     }
 
     public void mainServer(){
         try{
             ServerSocket ss = new ServerSocket(this.port);
-            this.tac = new ThreadAccepterClient(ss, this);
-            this.tac.start();
+            while (true){
+                Socket sock = ss.accept();
+                Session cl = new Session(sock, this);
+                cl.start();
+            }
             
         }
         catch(Exception e){
@@ -52,7 +56,7 @@ class Serveur{
         }
     }
     public boolean nomEstLibre(String nom){
-        Set<String> ensembleClient = this.tac.getDicoSession().keySet();
+        Set<String> ensembleClient = this.dicoPseudoSession.keySet();
         if(!ensembleClient.contains(nom)){
             return true;
         }
@@ -74,16 +78,16 @@ class Serveur{
     }
 
     public int getNombreUser(){
-        return this.tac.getDicoSession().size();
+        return this.dicoPseudoSession.size();
     }
 
     public String getListeClient(){
-        Set<String> ensembleClient = this.tac.getDicoSession().keySet();
+        Set<String> ensembleClient = this.dicoPseudoSession.keySet();
         return ensembleClient.toString();
     }
     public void envoyerMessageSallon(Session sessionEnvoyer,String message, String date){
         for(String pseudoSallon : this.listeSalon.get(sessionEnvoyer.getSallonActuelle())){
-            Session clientDestinataire = this.tac.getDicoSession().get(pseudoSallon);
+            Session clientDestinataire = this.dicoPseudoSession.get(pseudoSallon);
             if(!clientDestinataire.equals(sessionEnvoyer)){
                 clientDestinataire.envoyerMessageClient(sessionEnvoyer.getNomClient(), message, date);
             }
@@ -97,7 +101,7 @@ class Serveur{
             sessionEnvoyer.envoyerMessageClientDeServeur("C'est vous !!!");
         }
         else if(!this.nomEstLibre(destinataire)){
-            Session clientDestinataire = this.tac.getDicoSession().get(destinataire);
+            Session clientDestinataire = this.dicoPseudoSession.get(destinataire);
             clientDestinataire.envoyerMessagePriveClient(sessionEnvoyer.getNomClient(), message);
         }
         else{
