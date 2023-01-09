@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch LancerClient",
+            "request": "launch",
+            "mainClass": "LancerClient",
+            "projectName": "SAE-Messagerie-Java_c7ced4d"
+        },
+        {
+            "type": "java",
             "name": "Launch AppClient",
             "request": "launch",
             "mainClass": "AppClient",
