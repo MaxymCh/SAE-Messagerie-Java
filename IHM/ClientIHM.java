@@ -1,7 +1,9 @@
 import java.io.DataOutputStream;
-
+import java.net.ConnectException;
 import java.net.Socket;
 import java.util.Scanner;
+
+import javafx.scene.layout.VBox;
 
 
 
@@ -12,17 +14,23 @@ public class ClientIHM{
     private DataOutputStream dout;
     private Scanner sc;
 
-    private ClientReader cr;
+    private ClientReaderIHM cr;
 
     private AppClient appClient;
 
-    public ClientIHM(AppClient appClient){
+    
+
+    public ClientIHM(AppClient appClient) throws ConnectException{
         try{
             this.s=new Socket("localhost",6666);
+            this.dout=new DataOutputStream(s.getOutputStream());
             this.appClient = appClient;
         }
 
-        catch(Exception e){System.out.println(e);}
+        catch(Exception e){
+            System.out.println(e);
+            throw new ConnectException();
+        }
         }
 
 
@@ -37,38 +45,36 @@ public class ClientIHM{
     public void setNomClient(String nomC){
         this.nomClient = nomC;
     }
-    public ClientReader creeClientReader(){
-        this.cr = new ClientReader(this, this.s, this.appClient);
+    public ClientReaderIHM creeClientReader(){
+        this.cr = new ClientReaderIHM(this, this.s, this.appClient);
+        cr.start();
         return this.cr;
     }
 
-    public void mainSession(){
-        
+    public void envoyerMessage(String message){
         try{
-            
-            this.dout=new DataOutputStream(s.getOutputStream());
-            this.sc = new Scanner(System.in);
-            
-            cr.start();
-            while(true){
-                String message = this.sc.nextLine();
-                dout.writeUTF(message);
-                dout.flush();
-                if (message.equals("/quit")){
-                    cr.stop_thread();
-                    break;
-                }
-
-
+            dout.writeUTF(message);
+            dout.flush();
+            if (message.equals("/quit")){
                 
             }
-            Thread.sleep(1000);
-            dout.close();
-            s.close();
         }
-
         catch(Exception e){System.out.println(e);}
+    }
+    
+
+
+    public void quitter(){
+        cr.stop_thread();
+        try{
+            this.dout.close();
+            this.s.close();
+            Thread.sleep(1000);
         }
+        catch(Exception e){System.out.println(e);}
+        
+    }
+
 
         public void choisirNom(){
             try{

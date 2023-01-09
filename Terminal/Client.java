@@ -30,7 +30,7 @@ public class Client{
             this.dout=new DataOutputStream(s.getOutputStream());
             this.sc = new Scanner(System.in);
             
-            ClientReader cr = new ClientReader(this, s);
+            ClientReaderIHM cr = new ClientReaderIHM(this, s);
             cr.start();
             while(true){
                 String message = this.sc.nextLine();

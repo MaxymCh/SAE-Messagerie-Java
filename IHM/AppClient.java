@@ -1,16 +1,13 @@
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
+
+import javax.sound.sampled.Control;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.application.Application;
-
+import javafx.application.Platform;
 import javafx.application.Application;
 import java.awt.Dimension;
 import javafx.event.ActionEvent;
@@ -42,6 +39,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Arrays;
 import java.io.File;
+import java.net.ConnectException;
 import java.util.ArrayList;
 
 public class AppClient extends Application {
@@ -52,15 +50,24 @@ public class AppClient extends Application {
 
     private ClientIHM clientIHM;
 
-	JButton bgo = new JButton("GO/STOP");
-	JButton bstop = new JButton("Clear");
+    private VBox vBoxMessages;
+
+	private Button envoyer = new Button("Envoyer");
+
+    private TextField monMessage = new TextField();
 
     @Override
     public void init() {
+        try{
+        this.vBoxMessages = new VBox();
         this.panelCentral = new BorderPane();
-        this.clientIHM = new clientIHM(this);
-        ClientReader clientReader = this.clientIHM.creeClientReader();
-        this.clientIHM.mainSession();
+        this.clientIHM = new ClientIHM(this);
+        ClientReaderIHM clientReader = this.clientIHM.creeClientReader();
+        this.envoyer.setOnAction(new ControleurBoutonTFEnvoyer(this.monMessage, this.clientIHM));
+        }
+        catch(ConnectException e){
+            System.out.println(e);
+        }
 
         
     }
@@ -68,11 +75,11 @@ public class AppClient extends Application {
     private BorderPane fenetreMessagerie(){
          
         BorderPane interface1 = new BorderPane();
-        VBox jeu = new VBox();
-        TextField message1 = new TextField("Test textfield");
-        message1.setEditable(false);
-        jeu.getChildren().add(message1);
-        interface1.setCenter(jeu);
+        HBox hBox = new HBox();
+        VBox envoyerRecevoir = new VBox();
+        envoyerRecevoir.getChildren().addAll(this.monMessage, this.envoyer);
+        hBox.getChildren().addAll(this.vBoxMessages, envoyerRecevoir);
+        interface1.setCenter(hBox);
         return interface1;
      }
 
@@ -80,8 +87,11 @@ public class AppClient extends Application {
         this.panelCentral.setCenter(this.fenetreMessagerie());
     }
 
-    public void ajouterMessage(){
-        this.panelCentral.getCenter().getCenter().getChildren().add(new TextField("MEssage"));
+    public void ajouterMessage(String message){
+        TextField tfMessage = new TextField(message);
+        tfMessage.setEditable(false);
+        this.vBoxMessages.getChildren().add(tfMessage);
+
     }
 /*
 
@@ -92,10 +102,7 @@ public class AppClient extends Application {
         else if  (source == bstop) chrono.stop();
 	}
 */
-	public void paintComponent(Graphics g)  {
-		super.paintComponent(g);
-		/*chrono.dessine(g);*/
-	}
+
 
     private Scene laScene(){
         BorderPane fenetre = new BorderPane();
