@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 
 
-public class Client{
+public class ClientIHM{
     private String nomClient;
     private Socket s;
     private DataOutputStream dout;
@@ -14,12 +14,12 @@ public class Client{
 
     private ClientReader cr;
 
-    private IHMClient ihmClient;
+    private AppClient appClient;
 
-    public Client(IHMClient ihmClient){
+    public ClientIHM(AppClient appClient){
         try{
             this.s=new Socket("localhost",6666);
-            this.ihmClient = ihmClient;
+            this.appClient = appClient;
         }
 
         catch(Exception e){System.out.println(e);}
@@ -38,7 +38,7 @@ public class Client{
         this.nomClient = nomC;
     }
     public ClientReader creeClientReader(){
-        this.cr = new ClientReader(this, this.s, this.ihmClient);
+        this.cr = new ClientReader(this, this.s, this.appClient);
         return this.cr;
     }
 

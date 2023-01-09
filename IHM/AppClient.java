@@ -44,13 +44,13 @@ import java.util.Arrays;
 import java.io.File;
 import java.util.ArrayList;
 
-public class IHMClient extends Application {
+public class AppClient extends Application {
 
     private BorderPane panelCentral;
     private Stage affichage;
 
 
-    private Client client;
+    private ClientIHM clientIHM;
 
 	JButton bgo = new JButton("GO/STOP");
 	JButton bstop = new JButton("Clear");
@@ -58,9 +58,9 @@ public class IHMClient extends Application {
     @Override
     public void init() {
         this.panelCentral = new BorderPane();
-        this.client = new Client(this);
-        ClientReader clientReader = this.client.creeClientReader();
-        this.client.mainSession();
+        this.clientIHM = new clientIHM(this);
+        ClientReader clientReader = this.clientIHM.creeClientReader();
+        this.clientIHM.mainSession();
 
         
     }

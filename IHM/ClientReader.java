@@ -2,17 +2,17 @@ import java.io.DataInputStream;
 import java.net.Socket;
 
 public class ClientReader extends Thread{
-    private Client client;
+    private ClientIHM clientIHM;
     private Socket socket;
     private boolean clientLance;
 
-    private IHMClient ihmClient;
+    private AppClient appClient;
 
-    public ClientReader( Client client, Socket socket, IHMClient ihmClient){
+    public ClientReader( ClientIHM clientIHM, Socket socket, AppClient appClient){
         this.client = client;
         this.socket = socket;
         this.clientLance = true;
-        this.ihmClient = ihmClient;
+        this.appClient = appClient;
 
     }
 
@@ -21,7 +21,7 @@ public class ClientReader extends Thread{
     }
     public void run(){
         try{
-            this.ihmClient.ajouterMessage();
+            this.appClient.ajouterMessage();
             DataInputStream dis = new DataInputStream(this.socket.getInputStream());
             String mes;
             while(this.clientLance){
