@@ -14,7 +14,7 @@ public class ClientIHM{
     private DataOutputStream dout;
     private Scanner sc;
 
-    private ClientReaderIHM cr;
+    private Thread cr;
 
     private AppClient appClient;
 
@@ -45,8 +45,9 @@ public class ClientIHM{
     public void setNomClient(String nomC){
         this.nomClient = nomC;
     }
-    public ClientReaderIHM creeClientReader(){
-        this.cr = new ClientReaderIHM(this, this.s, this.appClient);
+    public Thread creeClientReader(){
+        ClientReaderIHM crIHM = new ClientReaderIHM(this, this.s, appClient);
+        this.cr =new Thread(crIHM);
         cr.start();
         return this.cr;
     }

@@ -56,13 +56,15 @@ public class AppClient extends Application {
 
     private TextField monMessage = new TextField();
 
+    private ScrollPane scrollPaneMessage = new ScrollPane();
+
     @Override
     public void init() {
         try{
         this.vBoxMessages = new VBox();
         this.panelCentral = new BorderPane();
         this.clientIHM = new ClientIHM(this);
-        ClientReaderIHM clientReader = this.clientIHM.creeClientReader();
+        Thread clientReader = this.clientIHM.creeClientReader();
         this.envoyer.setOnAction(new ControleurBoutonTFEnvoyer(this.monMessage, this.clientIHM));
         }
         catch(ConnectException e){
@@ -73,12 +75,12 @@ public class AppClient extends Application {
     }
 
     private BorderPane fenetreMessagerie(){
-         
+        this.scrollPaneMessage.setContent(this.vBoxMessages);
         BorderPane interface1 = new BorderPane();
         HBox hBox = new HBox();
         VBox envoyerRecevoir = new VBox();
         envoyerRecevoir.getChildren().addAll(this.monMessage, this.envoyer);
-        hBox.getChildren().addAll(this.vBoxMessages, envoyerRecevoir);
+        hBox.getChildren().addAll(this.scrollPaneMessage, envoyerRecevoir);
         interface1.setCenter(hBox);
         return interface1;
      }
@@ -86,12 +88,23 @@ public class AppClient extends Application {
      public void modeMessagerie(){
         this.panelCentral.setCenter(this.fenetreMessagerie());
     }
-
+/*
     public void ajouterMessage(String message){
         TextField tfMessage = new TextField(message);
         tfMessage.setEditable(false);
         this.vBoxMessages.getChildren().add(tfMessage);
 
+    }
+*/
+    public void ajouterMessage(String message) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                Label labelMessage = new Label(message);
+                vBoxMessages.getChildren().add(labelMessage);
+                scrollPaneMessage.setVvalue(1);
+            }
+        });
     }
 /*
 

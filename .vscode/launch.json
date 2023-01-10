@@ -5,15 +5,15 @@
             "name": "Launch LancerServeur",
             "request": "launch",
             "mainClass": "LancerServeur",
-            "projectName": "SAE-Messagerie-Java_c7ced4d"
+            "projectName": "SAE-Messagerie-Java_d1495b2d"
         },
         {
             "type": "java",
             "name": "Launch AppClient",
             "request": "launch",
-            "vmArgs": "--module-path C:/Users/maxym/Downloads/javafx-sdk-19/lib --add-modules javafx.controls,javafx.fxml",
+            "vmArgs": "--module-path /usr/share/openjfx/lib/ --add-modules javafx.controls,javafx.fxml",
             "mainClass": "AppClient",
-            "projectName": "SAE-Messagerie-Java_c7ced4d"
+            "projectName": "SAE-Messagerie-Java_d1495b2d"
         }
     ]
 }

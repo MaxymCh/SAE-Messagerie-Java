@@ -3,7 +3,7 @@ import java.net.Socket;
 import javafx.application.Platform;
 
 
-public class ClientReaderIHM extends Thread{
+public class ClientReaderIHM implements Runnable{
     private ClientIHM clientIHM;
     private Socket socket;
     private boolean clientLance;
@@ -21,12 +21,9 @@ public class ClientReaderIHM extends Thread{
     public void stop_thread(){
         this.clientLance = false;
     }
-    @Override
-    public void run(){
-    Platform.runLater(new Runnable() {
+
         @Override
-        public void run(){
-        
+        public void run() {
             try{
                 DataInputStream dis = new DataInputStream(socket.getInputStream());
                 String mes;
@@ -55,7 +52,6 @@ public class ClientReaderIHM extends Thread{
             }
     
         }
-    });
-}
+
 }
 
