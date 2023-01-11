@@ -3,6 +3,7 @@ import java.net.ConnectException;
 import java.net.Socket;
 import java.util.Scanner;
 
+
 import javafx.scene.layout.VBox;
 
 
@@ -56,7 +57,7 @@ public class ClientIHM{
         try{
             dout.writeUTF(message);
             dout.flush();
-            if (message.equals("/quit")){
+                        if (message.equals("/quit")){
                 
             }
         }

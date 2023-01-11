@@ -5,13 +5,13 @@ import java.util.HashMap;
 import java.util.Set;
 
 
-class Serveur{
+class ServeurIHM{
     private int port;
     public Socket socket;
     private HashMap<String, ArrayList<String>> listeSalon;
-    private HashMap<String, Session> dicoPseudoSession;
+    private HashMap<String, SessionIHM> dicoPseudoSession;
     private long tempCreationServeur;
-    public Serveur(int port){
+    public ServeurIHM(int port){
         this.port = port;
         this.listeSalon = new HashMap<>();
         this.listeSalon.put("Salon1", new ArrayList<>());
@@ -29,11 +29,11 @@ class Serveur{
     public long getTempsDepuisCreation(){
         return System.currentTimeMillis() - this.tempCreationServeur;
     }
-    public void retirerClientSalon(Session s){
+    public void retirerClientSalon(SessionIHM s){
         this.listeSalon.get(s.getSallonActuelle()).remove(s.getNomClient());
     }
 
-    public void ajouterSession(Session s, String nom){
+    public void ajouterSession(SessionIHM s, String nom){
         this.dicoPseudoSession.put(nom, s);
     }
 
@@ -46,7 +46,7 @@ class Serveur{
             ServerSocket ss = new ServerSocket(this.port);
             while (true){
                 Socket sock = ss.accept();
-                Session cl = new Session(sock, this);
+                SessionIHM cl = new SessionIHM(sock, this);
                 cl.start();
             }
             
@@ -62,7 +62,7 @@ class Serveur{
         }
         return false;
     }
-    public void changerSalon(Session session, String nouveauSallon){
+    public void changerSalon(SessionIHM session, String nouveauSallon){
         if (session.getSallonActuelle() != null){
             this.listeSalon.get(session.getSallonActuelle()).remove(session.getNomClient());
         }
@@ -85,18 +85,22 @@ class Serveur{
         Set<String> ensembleClient = this.dicoPseudoSession.keySet();
         return ensembleClient.toString();
     }
-    public void envoyerMessageSallon(Session sessionEnvoyer,String message, String date){
+    public void envoyerMessageSallon(SessionIHM sessionEnvoyer,String message, String date){
         for(String pseudoSallon : this.listeSalon.get(sessionEnvoyer.getSallonActuelle())){
-            Session clientDestinataire = this.dicoPseudoSession.get(pseudoSallon);
+            SessionIHM clientDestinataire = this.dicoPseudoSession.get(pseudoSallon);
             if(!clientDestinataire.equals(sessionEnvoyer)){
                 clientDestinataire.envoyerMessageClient(sessionEnvoyer.getNomClient(), message, date);
             }
         }
+        System.out.println("l95 ici");
+        sessionEnvoyer.envoyerMessageClient("Moi", message, date);
+        System.out.println("l97 ici");
+
 
 
     }
     
-    public void envoyerMessagePrive(Session sessionEnvoyer,String message, String destinataire){
+    public void envoyerMessagePrive(SessionIHM sessionEnvoyer,String message, String destinataire){
         if(sessionEnvoyer.getNomClient().equals(destinataire)){
             sessionEnvoyer.envoyerMessageClientDeServeur("C'est vous !!!");
         }

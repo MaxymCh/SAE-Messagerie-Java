@@ -7,14 +7,14 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class Session extends Thread {
+public class SessionIHM extends Thread {
     private Socket sock;
     private String nomClient;
     private String salonActuelle;
-    private Serveur serv;
+    private ServeurIHM serv;
     private DataInputStream dis;
     private DataOutputStream dos;
-    public Session( Socket sock, Serveur serv){
+    public SessionIHM( Socket sock, ServeurIHM serv){
         this.sock = sock;
         this.serv = serv;
     }
@@ -209,8 +209,8 @@ public class Session extends Thread {
         if(this == o){
             return true;
         }
-        if(o instanceof Session){
-            Session s2 = (Session)o;
+        if(o instanceof SessionIHM){
+            SessionIHM s2 = (SessionIHM)o;
             if(this.getNomClient().equals(s2.getNomClient())){
                 return true;
             }
