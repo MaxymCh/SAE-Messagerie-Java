@@ -127,8 +127,8 @@ public class AppClient extends Application {
         BorderPane fenetre = new BorderPane();
         fenetre.setCenter(this.panelCentral);
         Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        int height = (int) dimension.getHeight();
-        int width = (int) dimension.getWidth(); 
+        int height = (int) dimension.getHeight()/2;
+        int width = (int) dimension.getWidth()/2; 
         return new  Scene(fenetre,width,height);
     }
 
