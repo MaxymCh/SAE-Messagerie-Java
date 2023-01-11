@@ -65,7 +65,7 @@ public class AppClient extends Application {
         this.panelCentral = new BorderPane();
         this.clientIHM = new ClientIHM(this);
         Thread clientReader = this.clientIHM.creeClientReader();
-        this.envoyer.setOnAction(new ControleurBoutonTFEnvoyer(this.monMessage, this.clientIHM));
+        this.envoyer.setOnAction(new ControleurBoutonTFEnvoyer(this.monMessage, this.clientIHM, this));
         }
         catch(ConnectException e){
             System.out.println(e);
@@ -105,6 +105,12 @@ public class AppClient extends Application {
                 scrollPaneMessage.setVvalue(1);
             }
         });
+  
+    }
+
+
+    public void clearTFMessage() {
+        this.monMessage.clear();
     }
 /*
 

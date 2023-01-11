@@ -10,9 +10,11 @@ public class ControleurBoutonTFEnvoyer implements EventHandler<ActionEvent>  {
 
     private TextField textField;
     private ClientIHM clientIHM;
-    public ControleurBoutonTFEnvoyer(TextField textField, ClientIHM clientIHM) {
+    private AppClient appClient;
+    public ControleurBoutonTFEnvoyer(TextField textField, ClientIHM clientIHM, AppClient appClient) {
         this.textField = textField;
         this.clientIHM = clientIHM;
+        this.appClient = appClient;
     }
 
 
@@ -20,6 +22,7 @@ public class ControleurBoutonTFEnvoyer implements EventHandler<ActionEvent>  {
     public void handle(ActionEvent event) {
         System.out.println(this.textField.getText());
         this.clientIHM.envoyerMessage(this.textField.getText());
+        this.appClient.clearTFMessage();
     }
 
 }
