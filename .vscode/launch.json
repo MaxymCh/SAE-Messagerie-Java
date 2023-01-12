@@ -2,6 +2,34 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch test",
+            "request": "launch",
+            "mainClass": "test",
+            "projectName": "SAE-Messagerie-Java_9f91d2bd"
+        },
+        {
+            "type": "java",
+            "name": "Launch Main",
+            "request": "launch",
+            "mainClass": "Main",
+            "projectName": "SAE-Messagerie-Java_9f91d2bd"
+        },
+        {
+            "type": "java",
+            "name": "Launch AppClient",
+            "request": "launch",
+            "mainClass": "AppClient",
+            "projectName": "SAE-Messagerie-Java_9f91d2bd"
+        },
+        {
+            "type": "java",
+            "name": "Launch LancerServeurIHM",
+            "request": "launch",
+            "mainClass": "LancerServeurIHM",
+            "projectName": "SAE-Messagerie-Java_9f91d2bd"
+        },
+        {
+            "type": "java",
             "name": "Launch LancerServeurIHM",
             "request": "launch",
             "mainClass": "LancerServeurIHM",

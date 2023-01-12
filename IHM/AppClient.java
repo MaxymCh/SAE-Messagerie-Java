@@ -23,6 +23,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -58,13 +59,21 @@ public class AppClient extends Application {
 
     private ScrollPane scrollPaneMessage = new ScrollPane();
 
+    private List<String> listeSalon;
+
     @Override
     public void init() {
         try{
+        this.listeSalon = Arrays.asList("Jack","bob","frank");
         this.vBoxMessages = new VBox();
         this.panelCentral = new BorderPane();
         this.clientIHM = new ClientIHM(this);
         Thread clientReader = this.clientIHM.creeClientReader();
+        this.monMessage.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                this.envoyer.fire();
+            }
+        });
         this.envoyer.setOnAction(new ControleurBoutonTFEnvoyer(this.monMessage, this.clientIHM, this));
         }
         catch(ConnectException e){
@@ -74,14 +83,16 @@ public class AppClient extends Application {
         
     }
 
-    private BorderPane fenetreMessagerie(){
+private BorderPane fenetreMessagerie(){
         this.scrollPaneMessage.setContent(this.vBoxMessages);
         BorderPane interface1 = new BorderPane();
-        HBox hBox = new HBox();
-        VBox envoyerRecevoir = new VBox();
-        envoyerRecevoir.getChildren().addAll(this.monMessage, this.envoyer);
-        hBox.getChildren().addAll(this.scrollPaneMessage, envoyerRecevoir);
-        interface1.setCenter(hBox);
+        interface1.setLeft(addSalon());
+        HBox HbenvoyerRecevoir = new HBox();
+        HbenvoyerRecevoir.getChildren().addAll(this.envoyer,this.monMessage);
+        HbenvoyerRecevoir.setPadding(new Insets(10));
+        interface1.setCenter(this.scrollPaneMessage);
+        interface1.setBottom(HbenvoyerRecevoir);
+        HbenvoyerRecevoir.setAlignment(Pos.CENTER);
         return interface1;
      }
 
@@ -96,6 +107,25 @@ public class AppClient extends Application {
 
     }
 */
+    public void setListSalon(String entrer){
+        List<String> res = new ArrayList<>();
+        String salon = "";
+        int i = 1;
+        if (entrer.length()>2){
+            while(entrer.charAt(i)!=']'){
+                
+                if(entrer.charAt(i)!=',')
+                    salon+= entrer.charAt(i);
+                else{
+                    res.add(salon);
+                    salon = "";
+                }
+                i++;
+            }
+            res.add(salon);
+        }
+        this.listeSalon = res;
+    }
     public void ajouterMessage(String message) {
         Platform.runLater(new Runnable() {
             @Override
@@ -121,12 +151,23 @@ public class AppClient extends Application {
         else if  (source == bstop) chrono.stop();
 	}
 */
-
+    private VBox addSalon(){
+        VBox salonButtons = new VBox(); // conteneur pour les boutons de salon
+        for (String salon : this.listeSalon) {
+            Button salonButton = new Button(salon);
+            salonButton.setId("salon");
+            salonButton.setOnAction(new ControleurBoutonSalon(salonButton, this.clientIHM, this));
+            salonButtons.getChildren().add(salonButton);
+        }
+        salonButtons.setSpacing(30);
+        //salonButtons.setPrefHeight(50);
+        return salonButtons;}
 
     private Scene laScene(){
         BorderPane fenetre = new BorderPane();
         fenetre.setCenter(this.panelCentral);
         Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+        fenetre.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
         int height = (int) dimension.getHeight()/2;
         int width = (int) dimension.getWidth()/2; 
         return new  Scene(fenetre,width,height);

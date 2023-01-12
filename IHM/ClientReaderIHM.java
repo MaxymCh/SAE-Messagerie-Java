@@ -33,6 +33,8 @@ public class ClientReaderIHM implements Runnable{
                     if(mes.equals("true")){
                         mes = dis.readUTF();
                         clientIHM.setNomClient(mes);
+                        //mes = dis.readUTF();
+                        //appClient.setListSalon(mes);
                         break;
                     }
                     else{

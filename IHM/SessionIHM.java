@@ -150,6 +150,8 @@ public class SessionIHM extends Thread {
                 this.dos.flush();
                 this.dos.writeUTF(nomChoisi);
                 this.dos.flush();
+                //this.dos.writeUTF(this.serv.getListeSalon().toString());
+                //this.dos.flush();
                 this.dos.writeUTF(nomChoisi+"!!! Ca sonne bien !");
                 this.dos.flush();
                 this.nomClient = nomChoisi;
