@@ -2,6 +2,15 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch AppClient",
+            "request": "launch",
+            "vmArgs": "--module-path C:/Users/maxym/Downloads/javafx-sdk-19/lib --add-modules javafx.controls,javafx.fxml",
+
+            "mainClass": "AppClient",
+            "projectName": "SAE-Messagerie-Java_c7ced4d"
+        },
+        {
+            "type": "java",
             "name": "Launch LancerServeurIHM",
             "request": "launch",
             "mainClass": "LancerServeurIHM",
