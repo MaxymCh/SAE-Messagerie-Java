@@ -1,6 +1,9 @@
 import java.io.DataInputStream;
 import java.net.Socket;
-import javafx.application.Platform;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 
 
 public class ClientReaderIHM implements Runnable{
@@ -9,6 +12,7 @@ public class ClientReaderIHM implements Runnable{
     private boolean clientLance;
 
     private AppClient appClient;
+    private List<String> listeSalon;
 
     public ClientReaderIHM( ClientIHM clientIHM, Socket socket, AppClient appClient){
         this.clientIHM = clientIHM;
@@ -43,12 +47,21 @@ public class ClientReaderIHM implements Runnable{
     
                 while(clientLance){
                     mes = dis.readUTF();
-                    appClient.ajouterMessage(mes);
                     System.out.println(mes);
+                    String[] messagePlusieursPartie = mes.split(":", 2);
+                    String entete = messagePlusieursPartie[0];
+                    String contenu = messagePlusieursPartie[1];
+                    if(entete.equals("message")){appClient.ajouterMessage(contenu);}
+                    else if(entete.equals("listeSalon")){
+                        this.listeSalon = new ArrayList<>(Arrays.asList(contenu.split(",")));
+                        System.out.println(this.listeSalon);
+
+                    }
+                                        
                 }
             }
             catch(Exception e){
-                System.out.println("Erreur : "+e);
+                System.out.println("Erreur l54 : "+e);
             }
     
         }

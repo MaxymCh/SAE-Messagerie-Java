@@ -3,6 +3,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -28,27 +30,20 @@ public class SessionIHM extends Thread {
             choisirNom(this.dis);
             this.serv.ajouterSession(this, nomClient);
             String str;
-            this.dos.writeUTF("");
-            this.dos.flush();
-            this.dos.writeUTF("Vous devez tout d'abord choisir un salon /join nomSallon");
-            this.dos.flush();
-            this.dos.writeUTF("/help pour voir la liste des commandes");
-            this.dos.flush();
-            this.dos.writeUTF("Voici la liste des salons");
-            this.dos.flush();
-            this.dos.writeUTF(this.serv.getListeSalon().toString());
-            this.dos.flush();
+            this.envoyerMessageClientDeServeur("");
+            this.envoyerMessageClientDeServeur("Vous devez tout d'abord choisir un salon /join nomSallon");
+            this.envoyerMessageClientDeServeur("/help pour voir la liste des commandes");
+            this.envoyerMessageClientDeServeur("Voici la liste des salons");
+            this.envoyerMessageClientDeServeur(this.serv.getListeSalon().toString());
             while(true){
                 str = (String)dis.readUTF();
                 if(str.length()>=1){
                     if(str.substring(0, 1).equals("/")){
                         if (str.equals("/help")){
-                            this.dos.writeUTF(this.getListeCommande());
-                            this.dos.flush();
+                            this.envoyerMessageClientDeServeur(this.getListeCommande());
                         }
                         else if (str.equals("/quit")){
-                            this.dos.writeUTF("Merci et à bientot");
-                            this.dos.flush();
+                            this.envoyerMessageClientDeServeur("Merci et à bientot");
                             this.serv.removeSession(this.nomClient);
                             if(this.salonActuelle!=null){
                                 this.serv.retirerClientSalon(this);
@@ -57,10 +52,7 @@ public class SessionIHM extends Thread {
                         }
                         
                         else if (str.equals("/salon")){
-                            this.dos.writeUTF("Voici la liste des salons");
-                            this.dos.flush();
-                            this.dos.writeUTF(this.serv.getListeSalon().toString());
-                            this.dos.flush();
+                            this.envoyerListeSalonPourClient();
                         }
 
                         else if(str.length()>=5 && str.substring(0,5).equals("/join")){
@@ -68,33 +60,28 @@ public class SessionIHM extends Thread {
                                 String nomSalon =str.split(" ")[1];
                                 this.serv.changerSalon(this, nomSalon);
                             } catch (Exception e) {
-                                this.dos.writeUTF("La commande est invalide \n Pour rappel /join Salon4 pour rejoindre le salon Salon4");
-                                this.dos.flush();
+                                this.envoyerMessageClientDeServeur("La commande est invalide \n Pour rappel /join Salon4 pour rejoindre le salon Salon4");
                             }
                         }
                         
                         else if(str.equals("/nbuser")){
                             int nombreUser = this.serv.getNombreUser();
-                            this.dos.writeUTF("Il y a actuellement "+String.valueOf(nombreUser)+" client enregistré");
-                            this.dos.flush();
+                            this.envoyerMessageClientDeServeur("Il y a actuellement "+String.valueOf(nombreUser)+" client enregistré");
                             
                         }
                         else if(str.equals("/uptime")){
                             long tempsCreation = this.serv.getTempsDepuisCreation()/1000;
-                            this.dos.writeUTF("Le serveur est lancé depuis  "+String.valueOf(tempsCreation)+" secondes");
-                            this.dos.flush();
+                            this.envoyerMessageClientDeServeur("Le serveur est lancé depuis  "+String.valueOf(tempsCreation)+" secondes");
                             
                         }
 
                         else if(str.equals("/users")){
                             String listeUser = this.serv.getListeClient();
-                            this.dos.writeUTF("La liste des clients actuellement connecté est "+listeUser);
-                            this.dos.flush();
+                            this.envoyerMessageClientDeServeur("La liste des clients actuellement connecté est "+listeUser);
                             
                         }
                         else{
-                            this.dos.writeUTF("La commande est introuvable /help");
-                            this.dos.flush();
+                            this.envoyerMessageClientDeServeur("La commande est introuvable /help");
                         }
                         
       
@@ -119,8 +106,7 @@ public class SessionIHM extends Thread {
                         this.serv.envoyerMessageSallon(this, str,laDate);
                     }
                     else{
-                        this.dos.writeUTF("Essayer tout d'abord de rejoindre un salon /help");
-                        this.dos.flush();
+                        this.envoyerMessageClientDeServeur("Essayer tout d'abord de rejoindre un salon /help");
                     }
 
                     
@@ -150,13 +136,13 @@ public class SessionIHM extends Thread {
                 this.dos.flush();
                 this.dos.writeUTF(nomChoisi);
                 this.dos.flush();
-                this.dos.writeUTF(nomChoisi+"!!! Ca sonne bien !");
+                this.dos.writeUTF("message:"+nomChoisi+"!!! Ca sonne bien !");
                 this.dos.flush();
                 this.nomClient = nomChoisi;
             }
             
             else{
-                this.dos.writeUTF("Malheureusement "+nomChoisi+" est déjà utilisé ");
+                this.dos.writeUTF("message:"+"Malheureusement "+nomChoisi+" est déjà utilisé ");
                 this.dos.flush();
             }
         }
@@ -175,7 +161,7 @@ public class SessionIHM extends Thread {
 
     public void envoyerMessageClient(String nomEnvoyer, String mes, String date){
         try {
-            this.dos.writeUTF(date+ " de "+nomEnvoyer+" : "+mes);
+            this.dos.writeUTF("message:"+date+ " de "+nomEnvoyer+" : "+mes);
             this.dos.flush();
         } catch (IOException ex) {
             System.out.println("Error getting output stream: " + ex.getMessage());
@@ -186,7 +172,7 @@ public class SessionIHM extends Thread {
 
     public void envoyerMessageClientDeServeur(String mes){
         try {
-            this.dos.writeUTF(mes);
+            this.dos.writeUTF("message:"+mes);
             this.dos.flush();
         } catch (IOException ex) {
             System.out.println("Error getting output stream: " + ex.getMessage());
@@ -196,7 +182,20 @@ public class SessionIHM extends Thread {
 
     public void envoyerMessagePriveClient(String nomEnvoyer,String mes){
         try {
-            this.dos.writeUTF("Message privé de "+nomEnvoyer+" : "+mes);
+            this.dos.writeUTF("message:"+"Message privé de "+nomEnvoyer+" : "+mes);
+            this.dos.flush();
+        } catch (IOException ex) {
+            System.out.println("Error getting output stream: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+    }
+
+    public void envoyerListeSalonPourClient(){
+        try {
+            Set<String> listeSalon = this.serv.getListeSalon();
+            String strListeSalon = listeSalon.toString();
+            strListeSalon = strListeSalon.substring(1,strListeSalon.length()-1);
+            this.dos.writeUTF("listeSalon:"+strListeSalon);
             this.dos.flush();
         } catch (IOException ex) {
             System.out.println("Error getting output stream: " + ex.getMessage());
