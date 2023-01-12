@@ -105,7 +105,7 @@ class ServeurIHM{
             sessionEnvoyer.envoyerMessageClientDeServeur("C'est vous !!!");
         }
         else if(!this.nomEstLibre(destinataire)){
-            Session clientDestinataire = this.dicoPseudoSession.get(destinataire);
+            SessionIHM clientDestinataire = this.dicoPseudoSession.get(destinataire);
             clientDestinataire.envoyerMessagePriveClient(sessionEnvoyer.getNomClient(), message);
         }
         else{
