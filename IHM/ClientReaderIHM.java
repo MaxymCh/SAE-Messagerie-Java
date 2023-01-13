@@ -26,6 +26,8 @@ public class ClientReaderIHM implements Runnable{
         this.clientLance = false;
     }
 
+
+
         @Override
         public void run() {
             try{
@@ -46,7 +48,7 @@ public class ClientReaderIHM implements Runnable{
                         System.out.println(mes);
                     }               
                 }
-    
+               
                 while(clientLance){
                     mes = dis.readUTF();
                     System.out.println(mes);
@@ -57,6 +59,7 @@ public class ClientReaderIHM implements Runnable{
                     else if(entete.equals("listeSalon")){
                         this.listeSalon = new ArrayList<>(Arrays.asList(contenu.split(",")));
                         System.out.println(this.listeSalon);
+                        this.appClient.majSalon(this.listeSalon);
 
                     }
                                         
@@ -67,6 +70,8 @@ public class ClientReaderIHM implements Runnable{
             }
     
         }
+
+        
 
 }
 

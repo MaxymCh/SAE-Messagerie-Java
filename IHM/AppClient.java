@@ -5,6 +5,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import javafx.stage.Stage;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -53,18 +54,19 @@ public class AppClient extends Application {
 
     private VBox vBoxMessages;
 
+    private VBox vbSalonButtons;
+
 	private Button envoyer = new Button("Envoyer");
 
     private TextField monMessage = new TextField();
 
     private ScrollPane scrollPaneMessage = new ScrollPane();
 
-    private List<String> listeSalon;
 
     @Override
     public void init() {
         try{
-        this.listeSalon = Arrays.asList("Jack","bob","frank");
+        this.vbSalonButtons = new VBox();
         this.vBoxMessages = new VBox();
         this.panelCentral = new BorderPane();
         this.clientIHM = new ClientIHM(this);
@@ -84,9 +86,10 @@ public class AppClient extends Application {
     }
 
 private BorderPane fenetreMessagerie(){
+
         this.scrollPaneMessage.setContent(this.vBoxMessages);
         BorderPane interface1 = new BorderPane();
-        interface1.setLeft(addSalon());
+        interface1.setLeft(this.vbSalonButtons);
         HBox HbenvoyerRecevoir = new HBox();
         HbenvoyerRecevoir.getChildren().addAll(this.envoyer,this.monMessage);
         HbenvoyerRecevoir.setPadding(new Insets(10));
@@ -107,25 +110,7 @@ private BorderPane fenetreMessagerie(){
 
     }
 */
-    public void setListSalon(String entrer){
-        List<String> res = new ArrayList<>();
-        String salon = "";
-        int i = 1;
-        if (entrer.length()>2){
-            while(entrer.charAt(i)!=']'){
-                
-                if(entrer.charAt(i)!=',')
-                    salon+= entrer.charAt(i);
-                else{
-                    res.add(salon);
-                    salon = "";
-                }
-                i++;
-            }
-            res.add(salon);
-        }
-        this.listeSalon = res;
-    }
+
     public void ajouterMessage(String message) {
         Platform.runLater(new Runnable() {
             @Override
@@ -151,17 +136,30 @@ private BorderPane fenetreMessagerie(){
         else if  (source == bstop) chrono.stop();
 	}
 */
-    private VBox addSalon(){
-        VBox salonButtons = new VBox(); // conteneur pour les boutons de salon
-        for (String salon : this.listeSalon) {
-            Button salonButton = new Button(salon);
-            salonButton.setId("salon");
-            salonButton.setOnAction(new ControleurBoutonSalon(salonButton, this.clientIHM, this));
-            salonButtons.getChildren().add(salonButton);
+
+    public void activeSalon(){
+        for (Node bt : this.vbSalonButtons.getChildren()){
+            Button button = (Button) bt;
+            button.setDisable(false);
         }
-        salonButtons.setSpacing(30);
-        //salonButtons.setPrefHeight(50);
-        return salonButtons;}
+    }
+    public VBox majSalon(List<String> listeSalon){
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                for (String salon : listeSalon) {
+                    Button salonButton = new Button(salon);
+                    salonButton.setId("salon");
+                    salonButton.setOnAction(new ControleurBoutonSalon(salonButton, clientIHM, this));
+                    this.vbSalonButtons.getChildren().add(salonButton);
+                }
+                this.vbSalonButtons.setSpacing(30);
+                //salonButtons.setPrefHeight(50);
+            }
+        });
+        
+
+        }
 
     private Scene laScene(){
         BorderPane fenetre = new BorderPane();
