@@ -20,7 +20,6 @@ public class ControleurBoutonSalon implements EventHandler<ActionEvent>  {
 
     @Override
     public void handle(ActionEvent event) {
-        System.out.println(this.bt.getText());
         this.clientIHM.envoyerMessage("/join "+this.bt.getText());
         this.appClient.clearTFMessage();
     }

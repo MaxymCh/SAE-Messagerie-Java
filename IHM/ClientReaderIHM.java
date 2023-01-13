@@ -57,7 +57,7 @@ public class ClientReaderIHM implements Runnable{
                     String contenu = messagePlusieursPartie[1];
                     if(entete.equals("message")){appClient.ajouterMessage(contenu);}
                     else if(entete.equals("listeSalon")){
-                        this.listeSalon = new ArrayList<>(Arrays.asList(contenu.split(",")));
+                        this.listeSalon = new ArrayList<>(Arrays.asList(contenu.replace(" ", "").split(",")));
                         System.out.println(this.listeSalon);
                         this.appClient.majSalon(this.listeSalon);
 

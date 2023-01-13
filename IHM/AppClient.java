@@ -78,6 +78,8 @@ public class AppClient extends Application {
         });
         this.envoyer.setOnAction(new ControleurBoutonTFEnvoyer(this.monMessage, this.clientIHM, this));
         }
+        vBoxMessages.heightProperty().addListener();
+        /*https://www.tabnine.com/code/java/methods/javafx.scene.layout.VBox/heightProperty */ 
         catch(ConnectException e){
             System.out.println(e);
         }
@@ -117,10 +119,9 @@ private BorderPane fenetreMessagerie(){
             public void run() {
                 Label labelMessage = new Label(message);
                 vBoxMessages.getChildren().add(labelMessage);
-                scrollPaneMessage.setVvalue(1);
+                scrollPaneMessage.setVvalue(1.0);
             }
         });
-  
     }
 
 
@@ -143,17 +144,21 @@ private BorderPane fenetreMessagerie(){
             button.setDisable(false);
         }
     }
-    public VBox majSalon(List<String> listeSalon){
+    public void majSalon(List<String> listeSalon){
+        AppClient appCl = this;
+        VBox vbSalonButtons = this.vbSalonButtons;
+
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+                vbSalonButtons.getChildren().clear();
                 for (String salon : listeSalon) {
                     Button salonButton = new Button(salon);
                     salonButton.setId("salon");
-                    salonButton.setOnAction(new ControleurBoutonSalon(salonButton, clientIHM, this));
-                    this.vbSalonButtons.getChildren().add(salonButton);
+                    salonButton.setOnAction(new ControleurBoutonSalon(salonButton, clientIHM, appCl));
+                    vbSalonButtons.getChildren().add(salonButton);
                 }
-                this.vbSalonButtons.setSpacing(30);
+                vbSalonButtons.setSpacing(30);
                 //salonButtons.setPrefHeight(50);
             }
         });
