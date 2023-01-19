@@ -31,7 +31,7 @@ public class SessionIHM extends Thread {
             this.serv.ajouterSession(this, nomClient);
             String str;
             this.envoyerMessageClientDeServeur("");
-            this.envoyerMessageClientDeServeur("Vous devez tout d'abord choisir un salon /join nomSallon");
+            this.envoyerMessageClientDeServeur("Vous devez tout d'abord choisir un salon /join nomSallon ou cliquer sur l'un des salons");
             this.envoyerMessageClientDeServeur("/help pour voir la liste des commandes");
             this.envoyerMessageClientDeServeur("Voici la liste des salons");
             this.envoyerMessageClientDeServeur(this.serv.getListeSalon().toString());
@@ -224,7 +224,7 @@ public class SessionIHM extends Thread {
         String res = " Voici la liste des commandes : \n";
         res += "- /quit Quitter le serveur \n";
         res += "- /salon Voir la liste des salons disponible \n";
-        res += "- /join nomSalon Rejoindre un salon \n";
+        res += "- /join nomSalon Rejoindre un salon ou cliquer sur un des salons \n";
         res += "- /nbuser Connaitre le nombre de personnes enregistrés\n";
         res += "- /users Avoir la liste des personnes enregistrés \n";
         res += "- /uptime Connaitre depuis combien de temps le serveur est lancé \n";

@@ -18,6 +18,12 @@ class ServeurIHM{
         this.listeSalon.put("Salon2", new ArrayList<>());
         this.listeSalon.put("Salon3", new ArrayList<>());
         this.listeSalon.put("Salon4", new ArrayList<>());
+        this.listeSalon.put("Salon5", new ArrayList<>());
+        this.listeSalon.put("Salon6", new ArrayList<>());
+        this.listeSalon.put("Salon7", new ArrayList<>());
+        this.listeSalon.put("Salon8", new ArrayList<>());
+        this.listeSalon.put("Salon9", new ArrayList<>());
+        this.listeSalon.put("Salon10", new ArrayList<>());
         this.tempCreationServeur = System.currentTimeMillis();
         this.dicoPseudoSession = new HashMap<>();
     }

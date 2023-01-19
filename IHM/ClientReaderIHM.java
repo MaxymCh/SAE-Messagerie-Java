@@ -39,6 +39,7 @@ public class ClientReaderIHM implements Runnable{
                     if(mes.equals("true")){
                         mes = dis.readUTF();
                         clientIHM.setNomClient(mes);
+                        appClient.activeButtonAffiche();
                         //mes = dis.readUTF();
                         //appClient.setListSalon(mes);
                         break;
@@ -58,7 +59,6 @@ public class ClientReaderIHM implements Runnable{
                     if(entete.equals("message")){appClient.ajouterMessage(contenu);}
                     else if(entete.equals("listeSalon")){
                         this.listeSalon = new ArrayList<>(Arrays.asList(contenu.replace(" ", "").split(",")));
-                        System.out.println(this.listeSalon);
                         this.appClient.majSalon(this.listeSalon);
 
                     }

@@ -58,6 +58,8 @@ public class AppClient extends Application {
 
 	private Button envoyer = new Button("Envoyer");
 
+    private Button afficherSalon = new Button("Afficher salon");
+
     private TextField monMessage = new TextField();
 
     private ScrollPane scrollPaneMessage = new ScrollPane();
@@ -76,9 +78,10 @@ public class AppClient extends Application {
                 this.envoyer.fire();
             }
         });
-        this.envoyer.setOnAction(new ControleurBoutonTFEnvoyer(this.monMessage, this.clientIHM, this));
-        }
-        vBoxMessages.heightProperty().addListener();
+        this.afficherSalon.setOnAction(new ControleurBoutonAfficherSalon(this, this.clientIHM, this.afficherSalon));
+        this.afficherSalon.setDisable(true);
+        this.envoyer.setOnAction(new ControleurBoutonTFEnvoyer(this.monMessage, this.clientIHM, this));}
+        //vBoxMessages.heightProperty().addListener(null);}
         /*https://www.tabnine.com/code/java/methods/javafx.scene.layout.VBox/heightProperty */ 
         catch(ConnectException e){
             System.out.println(e);
@@ -91,9 +94,11 @@ private BorderPane fenetreMessagerie(){
 
         this.scrollPaneMessage.setContent(this.vBoxMessages);
         BorderPane interface1 = new BorderPane();
-        interface1.setLeft(this.vbSalonButtons);
+        ScrollPane spButtonSalon = new ScrollPane();
+        spButtonSalon.setContent(this.vbSalonButtons);
+        interface1.setLeft(spButtonSalon);
         HBox HbenvoyerRecevoir = new HBox();
-        HbenvoyerRecevoir.getChildren().addAll(this.envoyer,this.monMessage);
+        HbenvoyerRecevoir.getChildren().addAll(this.afficherSalon,this.envoyer,this.monMessage);
         HbenvoyerRecevoir.setPadding(new Insets(10));
         interface1.setCenter(this.scrollPaneMessage);
         interface1.setBottom(HbenvoyerRecevoir);
@@ -137,7 +142,15 @@ private BorderPane fenetreMessagerie(){
         else if  (source == bstop) chrono.stop();
 	}
 */
-
+    public void activeButtonAffiche(){
+        this.afficherSalon.setDisable(false);
+    }
+    public VBox getSalon(){
+        return this.vbSalonButtons;
+    }
+    public void clearSalon(){
+        this.vbSalonButtons.getChildren().clear();
+    }
     public void activeSalon(){
         for (Node bt : this.vbSalonButtons.getChildren()){
             Button button = (Button) bt;
