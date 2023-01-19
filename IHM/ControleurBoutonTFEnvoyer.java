@@ -20,7 +20,6 @@ public class ControleurBoutonTFEnvoyer implements EventHandler<ActionEvent>  {
 
     @Override
     public void handle(ActionEvent event) {
-        System.out.println(this.textField.getText());
         this.clientIHM.envoyerMessage(this.textField.getText());
         this.appClient.clearTFMessage();
     }

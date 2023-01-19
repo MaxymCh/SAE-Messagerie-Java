@@ -98,12 +98,7 @@ class ServeurIHM{
                 clientDestinataire.envoyerMessageClient(sessionEnvoyer.getNomClient(), message, date);
             }
         }
-        System.out.println("l95 ici");
         sessionEnvoyer.envoyerMessageClient("Moi", message, date);
-        System.out.println("l97 ici");
-
-
-
     }
     
     public void envoyerMessagePrive(SessionIHM sessionEnvoyer,String message, String destinataire){

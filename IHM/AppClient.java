@@ -80,9 +80,11 @@ public class AppClient extends Application {
         });
         this.afficherSalon.setOnAction(new ControleurBoutonAfficherSalon(this, this.clientIHM, this.afficherSalon));
         this.afficherSalon.setDisable(true);
-        this.envoyer.setOnAction(new ControleurBoutonTFEnvoyer(this.monMessage, this.clientIHM, this));}
+        this.envoyer.setOnAction(new ControleurBoutonTFEnvoyer(this.monMessage, this.clientIHM, this));
+        this.monMessage.setId("inputBox" );
+        this.monMessage.setPrefSize(500, 20);
+        this.monMessage.setPromptText("Entrer votre message ici");}
         //vBoxMessages.heightProperty().addListener(null);}
-        /*https://www.tabnine.com/code/java/methods/javafx.scene.layout.VBox/heightProperty */ 
         catch(ConnectException e){
             System.out.println(e);
         }
@@ -95,6 +97,7 @@ private BorderPane fenetreMessagerie(){
         this.scrollPaneMessage.setContent(this.vBoxMessages);
         BorderPane interface1 = new BorderPane();
         ScrollPane spButtonSalon = new ScrollPane();
+        spButtonSalon.setId("scrollpaneSalon");
         spButtonSalon.setContent(this.vbSalonButtons);
         interface1.setLeft(spButtonSalon);
         HBox HbenvoyerRecevoir = new HBox();

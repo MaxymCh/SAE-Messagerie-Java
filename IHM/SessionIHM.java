@@ -33,7 +33,7 @@ public class SessionIHM extends Thread {
             this.envoyerMessageClientDeServeur("");
             this.envoyerMessageClientDeServeur("Vous devez tout d'abord choisir un salon /join nomSallon ou cliquer sur l'un des salons");
             this.envoyerMessageClientDeServeur("/help pour voir la liste des commandes");
-            this.envoyerMessageClientDeServeur("Voici la liste des salons");
+            this.envoyerMessageClientDeServeur("Voici la liste des salons:");
             this.envoyerMessageClientDeServeur(this.serv.getListeSalon().toString());
             while(true){
                 str = (String)dis.readUTF();
@@ -221,13 +221,14 @@ public class SessionIHM extends Thread {
 
 
     public String getListeCommande(){
-        String res = " Voici la liste des commandes : \n";
-        res += "- /quit Quitter le serveur \n";
-        res += "- /salon Voir la liste des salons disponible \n";
-        res += "- /join nomSalon Rejoindre un salon ou cliquer sur un des salons \n";
-        res += "- /nbuser Connaitre le nombre de personnes enregistrés\n";
-        res += "- /users Avoir la liste des personnes enregistrés \n";
-        res += "- /uptime Connaitre depuis combien de temps le serveur est lancé \n";
+        String res = "\n Voici la liste des commandes : \n";
+        res += "- /quit :Quitter le serveur \n";
+        res += "- /salon :Voir la liste des salons disponible \n";
+        res += "- /join nomSalon :Rejoindre un salon ou cliquer sur un des salons \n";
+        res += "- /nbuser :Connaitre le nombre de personnes enregistrés\n";
+        res += "- /users :Avoir la liste des personnes enregistrés \n";
+        res += "- /uptime :Connaitre depuis combien de temps le serveur est lancé \n";
+        res += "- @userName :Envoyé un message privé à userName \n";
         return res;
     }
 

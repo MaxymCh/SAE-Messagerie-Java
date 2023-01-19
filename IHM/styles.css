@@ -2,11 +2,13 @@
 * {
     -fx-font-family: "Arial";
     -fx-font-size: 16px;
+    -fx-background-color: #36393f;
+    -fx-text-fill: white;
 }
 
 /* Change the background color of the input box */
 #inputBox {
-    -fx-background-color: #6c616134;
+    -fx-background-color: #40444b;
 }
 
 /* Change the style of the send button */
@@ -19,14 +21,10 @@
 }
 
 /* Change the style of the title */
-#title {
-    -fx-font-size: 36px;
-    -fx-text-fill: #3f51b5;
-    -fx-font-weight: bold;
-}
+
 #salon {
 
-        -fx-background-color: #3f51b5; /* couleur de fond */
+        -fx-background-color: #5865f2; /* couleur de fond */
         -fx-text-fill: white; /* couleur du texte */
         -fx-font-size: 18px; /* taille de police */
         -fx-padding: 10 20; /* marge interne */
@@ -34,4 +32,7 @@
         -fx-background-radius: 5; /* arrondi de la zone de fond */
         -fx-pref-width: 150px; /* largeur préférée */
         -fx-pref-height: 50px; /* hauteur préférée */
+}
+#scrollpaneSalon{
+    -fx-background-color: #202225;
 }

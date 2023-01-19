@@ -52,7 +52,6 @@ public class ClientReaderIHM implements Runnable{
                
                 while(clientLance){
                     mes = dis.readUTF();
-                    System.out.println(mes);
                     String[] messagePlusieursPartie = mes.split(":", 2);
                     String entete = messagePlusieursPartie[0];
                     String contenu = messagePlusieursPartie[1];

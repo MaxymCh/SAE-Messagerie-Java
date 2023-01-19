@@ -22,12 +22,10 @@ public class ControleurBoutonAfficherSalon implements EventHandler<ActionEvent> 
         if (this.appClient.getSalon().getChildren().size()>0){
             this.appClient.clearSalon();
             this.but.setText("Afficher salon");
-            System.out.println("CLEAR");
         }
         else{
             this.clientIHM.envoyerMessage("/salon");
             this.but.setText("Cacher Salon");
-            System.out.println("AJOUT SALON");
         }
     }
 
