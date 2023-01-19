@@ -1,48 +1,17 @@
 
-
-import javax.sound.sampled.Control;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-
 import javafx.stage.Stage;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.application.Application;
 import java.awt.Dimension;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
-import javafx.scene.control.ButtonBar.ButtonData ;
-
-import java.util.Set;
-
-import javax.swing.border.LineBorder;
-
-
-import java.util.HashSet;
 import java.util.List;
-import java.util.Arrays;
-import java.io.File;
 import java.net.ConnectException;
-import java.util.ArrayList;
 
 public class AppClient extends Application {
 
