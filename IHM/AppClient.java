@@ -1,7 +1,11 @@
 
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
 import java.awt.Dimension;
@@ -10,6 +14,10 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
+
 import java.util.List;
 import java.net.ConnectException;
 
@@ -69,9 +77,12 @@ public class AppClient extends Application {
 private BorderPane fenetreMessagerie(){
 
         this.scrollPaneMessage.setContent(this.vBoxMessages);
+        this.scrollPaneMessage.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
         BorderPane interface1 = new BorderPane();
         this.scrollPaneSallons.setId("scrollpaneSalon");
         this.scrollPaneSallons.setContent(this.vbSalonButtons);
+        this.scrollPaneSallons.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
         BorderPane bpLeft = new BorderPane();
         bpLeft.setCenter(this.scrollPaneSallons);
@@ -91,11 +102,22 @@ private BorderPane fenetreMessagerie(){
         this.panelCentral.setCenter(this.fenetreMessagerie());
     }
 /*
-    public void ajouterMessage(String message){
-        TextField tfMessage = new TextField(message);
-        tfMessage.setEditable(false);
-        this.vBoxMessages.getChildren().add(tfMessage);
-
+    String entre = this.textField.getText();
+        String entre2 = null;
+        Label lb = new Label(entre);
+        Label lb2 = null;
+        int i = 1;
+        while (entre.length()>30){
+            lb.setText(entre.substring(i));
+            lb2 = new Label(entre.substring(i, entre.length()));
+            i ++;
+        }
+        this.clientIHM.envoyerMessage(lb.getText());
+        if (lb2 != null){
+            this.clientIHM.envoyerMessage(lb2.getText());
+        }
+        this.appClient.clearTFMessage();
+    }
     }
 */
 
@@ -103,9 +125,19 @@ private BorderPane fenetreMessagerie(){
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                Label labelMessage = new Label(message);
-                vBoxMessages.getChildren().add(labelMessage);
+                TextFlow textFlow = new TextFlow();
+                textFlow.setPrefWidth(800);
+                Text txt = new Text(message);
+                txt.setFill(Color.WHITE);
+                textFlow.getChildren().add(txt);
+                vBoxMessages.getChildren().add(textFlow);
                 scrollPaneMessage.setVvalue(1.0);
+                Timeline timeline = new Timeline();
+                KeyValue kv = new KeyValue(scrollPaneMessage.vvalueProperty(), 1.0);
+                KeyFrame kf = new KeyFrame(Duration.millis(500), kv);
+                timeline.getKeyFrames().add(kf);
+                timeline.play();
+
             }
         });
     }
