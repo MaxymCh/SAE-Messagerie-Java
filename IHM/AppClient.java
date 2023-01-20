@@ -126,7 +126,7 @@ private BorderPane fenetreMessagerie(){
             @Override
             public void run() {
                 TextFlow textFlow = new TextFlow();
-                textFlow.setPrefWidth(800);
+                textFlow.setPrefWidth(650);
                 Text txt = new Text(message);
                 txt.setFill(Color.WHITE);
                 textFlow.getChildren().add(txt);
