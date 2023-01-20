@@ -33,11 +33,15 @@ public class AppClient extends Application {
 
     private ScrollPane scrollPaneMessage = new ScrollPane();
 
+    private ScrollPane scrollPaneSallons = new ScrollPane();
+
 
     @Override
     public void init() {
         try{
         this.vbSalonButtons = new VBox();
+        this.scrollPaneSallons.setVisible(false);
+
         this.vBoxMessages = new VBox();
         this.panelCentral = new BorderPane();
         this.clientIHM = new ClientIHM(this);
@@ -47,12 +51,13 @@ public class AppClient extends Application {
                 this.envoyer.fire();
             }
         });
-        this.afficherSalon.setOnAction(new ControleurBoutonAfficherSalon(this, this.clientIHM, this.afficherSalon));
+        this.afficherSalon.setOnAction(new ControleurBoutonAfficherSalon(this, this.clientIHM, this.afficherSalon, this.vbSalonButtons, scrollPaneSallons));
         this.afficherSalon.setDisable(true);
         this.envoyer.setOnAction(new ControleurBoutonTFEnvoyer(this.monMessage, this.clientIHM, this));
         this.monMessage.setId("inputBox" );
         this.monMessage.setPrefSize(500, 20);
         this.monMessage.setPromptText("Entrer votre message ici");}
+
         //vBoxMessages.heightProperty().addListener(null);}
         catch(ConnectException e){
             System.out.println(e);
@@ -65,12 +70,16 @@ private BorderPane fenetreMessagerie(){
 
         this.scrollPaneMessage.setContent(this.vBoxMessages);
         BorderPane interface1 = new BorderPane();
-        ScrollPane spButtonSalon = new ScrollPane();
-        spButtonSalon.setId("scrollpaneSalon");
-        spButtonSalon.setContent(this.vbSalonButtons);
-        interface1.setLeft(spButtonSalon);
+        this.scrollPaneSallons.setId("scrollpaneSalon");
+        this.scrollPaneSallons.setContent(this.vbSalonButtons);
+
+        BorderPane bpLeft = new BorderPane();
+        bpLeft.setCenter(this.scrollPaneSallons);
+        bpLeft.setRight(this.afficherSalon);
+        bpLeft.setAlignment(this.afficherSalon, Pos.CENTER);
+        interface1.setLeft(bpLeft);
         HBox HbenvoyerRecevoir = new HBox();
-        HbenvoyerRecevoir.getChildren().addAll(this.afficherSalon,this.envoyer,this.monMessage);
+        HbenvoyerRecevoir.getChildren().addAll(this.envoyer,this.monMessage);
         HbenvoyerRecevoir.setPadding(new Insets(10));
         interface1.setCenter(this.scrollPaneMessage);
         interface1.setBottom(HbenvoyerRecevoir);
