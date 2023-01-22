@@ -1,24 +1,16 @@
 
 import javafx.event.EventHandler;
+import javafx.scene.Group;
 import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.VBox;
-import javafx.scene.shape.Polygon;
-import javafx.animation.TranslateTransition;
-import javafx.util.Duration;
-
 
 public class ControleTrapezeSalon implements EventHandler<MouseEvent>  {
     private AppClient appClient;
-    private Polygon trapeze;
-    private ClientIHM clientIHM;
-    private VBox vbSalonButtons;
-    private ScrollPane scrollPaneSallons;
+    private Group grp;
 
-    public ControleTrapezeSalon(AppClient appClient, Polygon trapeze) {
+    public ControleTrapezeSalon(AppClient appClient, Group grp) {
         this.appClient = appClient;
-        this.trapeze = trapeze;
+        this.grp = grp;
     }
 
 
@@ -29,10 +21,10 @@ public class ControleTrapezeSalon implements EventHandler<MouseEvent>  {
         but.fire();
         if (! but.isDisabled()){
         if (but.getText().equals("Cacher Salon")){
-            this.trapeze.setRotate(270);
+            this.grp.setRotate(180);
         }
         else{
-            this.trapeze.setRotate(90);}
+            this.grp.setRotate(0);}
         }
     }
 

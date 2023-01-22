@@ -1,6 +1,7 @@
 
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.animation.KeyFrame;
@@ -16,6 +17,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
@@ -44,23 +46,12 @@ public class AppClient extends Application {
 
     private ScrollPane scrollPaneSallons = new ScrollPane();
 
-    private Polygon trapeze = new Polygon();
+    private Group group = new Group();
 
 
     @Override
     public void init() {
         try{
-        
-        this.trapeze = new Polygon();
-        trapeze.setFill(Color.rgb(64, 68, 75));
-        trapeze.getPoints().addAll(new Double[]{
-            200.0, 100.0,
-            250.0, 150.0,
-            100.0, 150.0,
-            150.0, 100.0
-        });
-        this.trapeze.setRotate(90);
-        this.trapeze.setOnMouseClicked(new ControleTrapezeSalon(this, this.trapeze));
         this.vbSalonButtons = new VBox();
         this.scrollPaneSallons.setVisible(false);
 
@@ -100,13 +91,31 @@ private BorderPane fenetreMessagerie(){
         this.scrollPaneSallons.setId("scrollpaneSalon");
         this.scrollPaneSallons.setContent(this.vbSalonButtons);
         this.scrollPaneSallons.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-
+        Polygon trapeze = new Polygon();
+        trapeze.setFill(Color.rgb(64, 68, 75));
+        trapeze.getPoints().addAll(new Double[]{
+            200.0, 125.0,
+            225.0, 150.0,
+            125.0, 150.0,
+            150.0, 125.0
+        });
+        trapeze.setRotate(90);
         BorderPane bpLeft = new BorderPane();
         bpLeft.setCenter(this.scrollPaneSallons);
         //bpLeft.setRight(this.afficherSalon);
-        bpLeft.setRight(this.trapeze);
-        //bpLeft.setAlignment(this.afficherSalon, Pos.CENTER);
-        bpLeft.setAlignment(this.trapeze, Pos.CENTER);
+        double centerX = (trapeze.getPoints().get(0) + trapeze.getPoints().get(2) + trapeze.getPoints().get(4) + trapeze.getPoints().get(6)) / 4;
+        double centerY = (trapeze.getPoints().get(1) + trapeze.getPoints().get(3) + trapeze.getPoints().get(5) + trapeze.getPoints().get(7)) / 4;
+        Text text = new Text(">");
+
+        text.setX(centerX);
+        text.setY(centerY+5);
+        text.setFont(Font.font(24));
+        text.setFill(Color.WHITE);
+        this.group.getChildren().add(trapeze);
+        this.group.getChildren().add(text);
+        this.group.setOnMouseClicked(new ControleTrapezeSalon(this, this.group));
+        bpLeft.setRight(this.group);
+        bpLeft.setAlignment(this.group, Pos.CENTER);
         interface1.setLeft(bpLeft);
         HBox HbenvoyerRecevoir = new HBox();
         HbenvoyerRecevoir.getChildren().addAll(this.envoyer,this.monMessage);
