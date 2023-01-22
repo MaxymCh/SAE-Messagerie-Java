@@ -2,6 +2,7 @@ import java.io.DataOutputStream;
 
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.concurrent.CyclicBarrier;
 
 
 
@@ -11,6 +12,7 @@ public class Client{
     private Socket s;
     private DataOutputStream dout;
     private Scanner sc;
+    private boolean continuer = true;
 
     public Socket getSocket(){
         return this.s;
@@ -26,24 +28,32 @@ public class Client{
     public void mainSession(){
         
         try{
-            this.s=new Socket("localhost",6666);
-            this.dout=new DataOutputStream(s.getOutputStream());
             this.sc = new Scanner(System.in);
-            
-            ClientReaderIHM cr = new ClientReaderIHM(this, s);
+            System.out.println("Saisissez votre adresse ip ou localhost");
+            String adresseIP = this.sc.nextLine();
+            try{
+                this.s=new Socket(adresseIP,6666);
+            }
+            catch(Exception e){
+                System.out.println("Il y a eu une erreur dans votre adresse ip vous etes connecter en localhost");
+                this.s=new Socket("localhost",6666);
+            }
+            this.dout=new DataOutputStream(s.getOutputStream());
+            CyclicBarrier barrier = new CyclicBarrier(2);
+            ClientReader cr = new ClientReader(this, s, barrier);
             cr.start();
-            while(true){
+            while(this.continuer){
                 String message = this.sc.nextLine();
                 dout.writeUTF(message);
                 dout.flush();
                 if (message.equals("/quit")){
-                    cr.stop_thread();
-                    break;
+                    barrier.await();
                 }
 
 
                 
             }
+            cr.stop_thread();
             Thread.sleep(1000);
             dout.close();
             s.close();
@@ -52,6 +62,10 @@ public class Client{
         catch(Exception e){System.out.println(e);}
         }
 
+
+        public void quitter(){
+            this.continuer = false;
+        }
         public void choisirNom(){
             try{
                

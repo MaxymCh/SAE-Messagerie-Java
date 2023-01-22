@@ -47,13 +47,22 @@ public class Session extends Thread {
                             this.dos.flush();
                         }
                         else if (str.equals("/quit")){
-                            this.dos.writeUTF("Merci et à bientot");
-                            this.dos.flush();
-                            this.serv.removeSession(this.nomClient);
-                            if(this.salonActuelle!=null){
-                                this.serv.retirerClientSalon(this);
+                            if(this.salonActuelle == null){
+                                this.dos.writeUTF("servquit");
+                                this.dos.flush();
+                                this.dos.writeUTF("Merci et à bientot");
+                                this.dos.flush();
+                                this.serv.removeSession(this.nomClient);
+                                break;
                             }
-                            break;
+                            else{
+                                this.dos.writeUTF("servquitsalon");
+                                this.dos.flush();
+                                this.dos.writeUTF("Vous quitter le salon "+this.salonActuelle);
+                                this.dos.flush();
+                                this.serv.retirerClientSalon(this);
+                                this.salonActuelle = null;
+                            }
                         }
                         
                         else if (str.equals("/salon")){
