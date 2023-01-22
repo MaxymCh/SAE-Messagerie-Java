@@ -3,6 +3,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -52,6 +53,13 @@ public class SessionIHM extends Thread {
                         
                         else if (str.equals("/salon")){
                             this.envoyerListeSalonPourClient();
+                        }
+
+                        else if (str.equals("/demandeMessage")){
+                            if(this.salonActuelle!=null){
+                                this.envoyerListeMessageDansSalonPourClient();
+                            }
+                            
                         }
 
                         else if(str.length()>=5 && str.substring(0,5).equals("/join")){
@@ -160,17 +168,6 @@ public class SessionIHM extends Thread {
         this.salonActuelle = nouveauSallon;
     }
 
-    public void envoyerMessageClient(String nomEnvoyer, String mes, String date){
-        try {
-            this.dos.writeUTF("message:"+date+ " de "+nomEnvoyer+" : "+mes);
-            this.dos.flush();
-        } catch (IOException ex) {
-            System.out.println("Error getting output stream: " + ex.getMessage());
-            ex.printStackTrace();
-        }
-        
-    }
-
     public void envoyerMessageClientDeServeur(String mes){
         try {
             this.dos.writeUTF("message:"+mes);
@@ -204,6 +201,26 @@ public class SessionIHM extends Thread {
         }
     }
 
+    public void envoyerListeMessageDansSalonPourClient(){
+        try {
+            List<String> listeMessageDansUnSalon = this.serv.getMessageDansSalon(this.salonActuelle);
+            String strMessages = "";
+            for(String message : listeMessageDansUnSalon){
+                strMessages += message+",:,;,";
+            }
+            if(listeMessageDansUnSalon.size()>0){strMessages = strMessages.substring(0,strMessages.length()-5);}
+            
+            this.dos.writeUTF("listeMessages:"+strMessages);
+            this.dos.flush();
+        } catch (IOException ex) {
+            System.out.println("Error getting output stream: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+    }
+
+
+
+    
     @Override
     public boolean equals(Object o){
         if(this == o){

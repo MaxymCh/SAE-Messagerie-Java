@@ -58,7 +58,7 @@ public class ClientIHM{
         try{
             dout.writeUTF(message);
             dout.flush();
-                        if (message.equals("/quit")){
+            if (message.equals("/quit")){
                 
             }
         }

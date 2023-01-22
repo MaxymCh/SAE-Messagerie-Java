@@ -164,6 +164,15 @@ private BorderPane fenetreMessagerie(){
     public void clearSalon(){
         this.vbSalonButtons.getChildren().clear();
     }
+
+    public void clearLesMessageEnCours(){
+        this.vBoxMessages.getChildren().clear();
+    }
+
+    public void ajouterLesMessagesEnCoursSalon(){
+        this.vBoxMessages.getChildren().clear();
+    }
+
     public void activeSalon(){
         for (Node bt : this.vbSalonButtons.getChildren()){
             Button button = (Button) bt;
@@ -190,7 +199,15 @@ private BorderPane fenetreMessagerie(){
         });
         
 
+    }
+
+    public void majMessage(List<String> listeMessages){
+        for(String message: listeMessages){
+            this.ajouterMessage(message);
         }
+        
+
+    }
 
     private Scene laScene(){
         BorderPane fenetre = new BorderPane();

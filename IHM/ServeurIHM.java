@@ -1,7 +1,9 @@
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 
@@ -9,27 +11,29 @@ class ServeurIHM{
     private int port;
     public Socket socket;
     private HashMap<String, ArrayList<String>> listeSalon;
+    private HashMap<String, ArrayList<String>> listeMessageSalon;
     private HashMap<String, SessionIHM> dicoPseudoSession;
     private long tempCreationServeur;
     public ServeurIHM(int port){
         this.port = port;
         this.listeSalon = new HashMap<>();
-        this.listeSalon.put("Salon1", new ArrayList<>());
-        this.listeSalon.put("Salon2", new ArrayList<>());
-        this.listeSalon.put("Salon3", new ArrayList<>());
-        this.listeSalon.put("Salon4", new ArrayList<>());
-        this.listeSalon.put("Salon5", new ArrayList<>());
-        this.listeSalon.put("Salon6", new ArrayList<>());
-        this.listeSalon.put("Salon7", new ArrayList<>());
-        this.listeSalon.put("Salon8", new ArrayList<>());
-        this.listeSalon.put("Salon9", new ArrayList<>());
-        this.listeSalon.put("Salon10", new ArrayList<>());
+        this.listeMessageSalon = new HashMap<>();
+
+        List<String> mesSalon = Arrays.asList("Salon1","Salon2","Salon3","Salon4","Salon5","Salon6","Salon7","Salon8","Salon9","Salon10");
+        for(String nomSal: mesSalon){
+            this.listeSalon.put(nomSal, new ArrayList<>());
+            this.listeMessageSalon.put(nomSal, new ArrayList<>());
+        }
         this.tempCreationServeur = System.currentTimeMillis();
         this.dicoPseudoSession = new HashMap<>();
     }
 
     public Set<String> getListeSalon(){
         return this.listeSalon.keySet();
+    }
+
+    public List<String> getMessageDansSalon(String nomSallon){
+        return this.listeMessageSalon.get(nomSallon);
     }
 
     public long getTempsDepuisCreation(){
@@ -92,13 +96,18 @@ class ServeurIHM{
         return ensembleClient.toString();
     }
     public void envoyerMessageSallon(SessionIHM sessionEnvoyer,String message, String date){
+        String messagePourMoi = date+ " de Moi : "+message;
+        sessionEnvoyer.envoyerMessageClientDeServeur(messagePourMoi);
+        String messagePourAutres = date+ " de "+sessionEnvoyer.getNomClient()+" : "+message;
+        aujouterMessageDansUnSallon(messagePourAutres, sessionEnvoyer.getSallonActuelle());
         for(String pseudoSallon : this.listeSalon.get(sessionEnvoyer.getSallonActuelle())){
             SessionIHM clientDestinataire = this.dicoPseudoSession.get(pseudoSallon);
             if(!clientDestinataire.equals(sessionEnvoyer)){
-                clientDestinataire.envoyerMessageClient(sessionEnvoyer.getNomClient(), message, date);
+                clientDestinataire.envoyerMessageClientDeServeur(messagePourAutres);
             }
         }
-        sessionEnvoyer.envoyerMessageClient("Moi", message, date);
+        System.out.println(this.listeMessageSalon);
+        
     }
     
     public void envoyerMessagePrive(SessionIHM sessionEnvoyer,String message, String destinataire){
@@ -116,5 +125,9 @@ class ServeurIHM{
         
 
 
+    }
+
+    public synchronized void aujouterMessageDansUnSallon(String message, String nomSallon){
+        this.listeMessageSalon.get(nomSallon).add(message);
     }
 }

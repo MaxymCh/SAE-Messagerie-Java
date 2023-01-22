@@ -13,6 +13,8 @@ public class ClientReaderIHM implements Runnable{
 
     private AppClient appClient;
     private List<String> listeSalon;
+    
+    private List<String> messageActuelleDansSalon;
 
     public ClientReaderIHM( ClientIHM clientIHM, Socket socket, AppClient appClient){
         this.clientIHM = clientIHM;
@@ -59,6 +61,13 @@ public class ClientReaderIHM implements Runnable{
                     else if(entete.equals("listeSalon")){
                         this.listeSalon = new ArrayList<>(Arrays.asList(contenu.replace(" ", "").split(",")));
                         this.appClient.majSalon(this.listeSalon);
+                    }
+
+                    else if(entete.equals("listeMessages")){
+                        System.out.println(contenu);
+                        this.messageActuelleDansSalon = new ArrayList<>(Arrays.asList(contenu.split(",:,;,")));
+                        System.out.println(this.messageActuelleDansSalon);
+                        this.appClient.majMessage(this.messageActuelleDansSalon);
 
                     }
                                         

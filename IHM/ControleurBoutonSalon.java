@@ -18,8 +18,9 @@ public class ControleurBoutonSalon implements EventHandler<ActionEvent>  {
 
     @Override
     public void handle(ActionEvent event) {
+        this.appClient.clearLesMessageEnCours();
         this.clientIHM.envoyerMessage("/join "+this.bt.getText());
-        /*this.appClient.clearTFMessage();*/
+        this.clientIHM.envoyerMessage("/demandeMessage");
     }
 
 }
