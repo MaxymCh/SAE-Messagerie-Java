@@ -36,6 +36,8 @@ public class AppClient extends Application {
 
     private VBox vbSalonButtons;
 
+    private Button quitter = new Button("Quitter");
+
 	private Button envoyer = new Button("Envoyer");
 
     private Button afficherSalon = new Button("Afficher salon");
@@ -52,9 +54,9 @@ public class AppClient extends Application {
     @Override
     public void init() {
         try{
+        this.quitter.setId("Quitter");
         this.vbSalonButtons = new VBox();
         this.scrollPaneSallons.setVisible(false);
-
         this.vBoxMessages = new VBox();
         this.panelCentral = new BorderPane();
         this.clientIHM = new ClientIHM(this);
@@ -222,6 +224,7 @@ private BorderPane fenetreMessagerie(){
                     vbSalonButtons.getChildren().add(salonButton);
                 }
                 vbSalonButtons.setSpacing(30);
+                vbSalonButtons.setPadding(new Insets(20));
                 //salonButtons.setPrefHeight(50);
             }
         });
@@ -239,11 +242,20 @@ private BorderPane fenetreMessagerie(){
 
     private Scene laScene(){
         BorderPane fenetre = new BorderPane();
+        HBox hbTop = new HBox();
+        Label titre = new Label("DISCOURD");
+        hbTop.setPadding(new Insets(10));
+        hbTop.getChildren().add(this.quitter);
+        hbTop.getChildren().add(titre);
+
+
+        fenetre.setTop(hbTop);
         fenetre.setCenter(this.panelCentral);
         Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
         fenetre.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
         int height = (int) dimension.getHeight()/2;
         int width = (int) dimension.getWidth()/2; 
+        HBox.setMargin(quitter,new Insets(0,width/3,0,0));
         return new  Scene(fenetre,width,height);
     }
 

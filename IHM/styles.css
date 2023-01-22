@@ -21,12 +21,22 @@
 }
 
 /* Change the style of the title */
+#Quitter{
 
+    -fx-background-color: #d92a2a; /* couleur de fond */
+    -fx-text-fill: white; /* couleur du texte */
+    -fx-font-size: 18px; /* taille de police */
+    -fx-border-radius: 10px; /* arrondi des bords */
+    -fx-background-radius: 5; /* arrondi de la zone de fond */
+    -fx-pref-width: 100px; /* largeur préférée */
+    -fx-pref-height: 20px; /* hauteur préférée */
+}
 #salon {
 
         -fx-background-color: #5865f2; /* couleur de fond */
         -fx-text-fill: white; /* couleur du texte */
         -fx-font-size: 18px; /* taille de police */
+        -fx-margin: 30; /* marge interne */
         -fx-padding: 10 20; /* marge interne */
         -fx-border-radius: 10px; /* arrondi des bords */
         -fx-background-radius: 5; /* arrondi de la zone de fond */
