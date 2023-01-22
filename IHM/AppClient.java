@@ -15,6 +15,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
@@ -43,10 +44,23 @@ public class AppClient extends Application {
 
     private ScrollPane scrollPaneSallons = new ScrollPane();
 
+    private Polygon trapeze = new Polygon();
+
 
     @Override
     public void init() {
         try{
+        
+        this.trapeze = new Polygon();
+        trapeze.setFill(Color.rgb(64, 68, 75));
+        trapeze.getPoints().addAll(new Double[]{
+            200.0, 100.0,
+            250.0, 150.0,
+            100.0, 150.0,
+            150.0, 100.0
+        });
+        this.trapeze.setRotate(90);
+        this.trapeze.setOnMouseClicked(new ControleTrapezeSalon(this, this.trapeze));
         this.vbSalonButtons = new VBox();
         this.scrollPaneSallons.setVisible(false);
 
@@ -59,7 +73,7 @@ public class AppClient extends Application {
                 this.envoyer.fire();
             }
         });
-        this.afficherSalon.setOnAction(new ControleurBoutonAfficherSalon(this, this.clientIHM, this.afficherSalon, this.vbSalonButtons, scrollPaneSallons));
+        this.afficherSalon.setOnAction(new ControleurBoutonAfficherSalon(this, this.clientIHM, this.afficherSalon, this.vbSalonButtons, this.scrollPaneSallons));
         this.afficherSalon.setDisable(true);
         this.envoyer.setOnAction(new ControleurBoutonTFEnvoyer(this.monMessage, this.clientIHM, this));
         this.monMessage.setId("inputBox" );
@@ -74,6 +88,9 @@ public class AppClient extends Application {
         
     }
 
+public Button getAffichesalon(){
+    return this.afficherSalon;
+}
 private BorderPane fenetreMessagerie(){
 
         this.scrollPaneMessage.setContent(this.vBoxMessages);
@@ -86,8 +103,10 @@ private BorderPane fenetreMessagerie(){
 
         BorderPane bpLeft = new BorderPane();
         bpLeft.setCenter(this.scrollPaneSallons);
-        bpLeft.setRight(this.afficherSalon);
-        bpLeft.setAlignment(this.afficherSalon, Pos.CENTER);
+        //bpLeft.setRight(this.afficherSalon);
+        bpLeft.setRight(this.trapeze);
+        //bpLeft.setAlignment(this.afficherSalon, Pos.CENTER);
+        bpLeft.setAlignment(this.trapeze, Pos.CENTER);
         interface1.setLeft(bpLeft);
         HBox HbenvoyerRecevoir = new HBox();
         HbenvoyerRecevoir.getChildren().addAll(this.envoyer,this.monMessage);
