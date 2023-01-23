@@ -9,7 +9,6 @@ import java.util.List;
 public class ClientReaderIHM implements Runnable{
     private ClientIHM clientIHM;
     private Socket socket;
-    private boolean clientLance;
 
     private AppClient appClient;
     private List<String> listeSalon;
@@ -22,13 +21,6 @@ public class ClientReaderIHM implements Runnable{
         this.appClient = appClient;
 
     }
-
-    public void stop_thread(){
-        this.clientLance = false;
-    }
-
-
-
         @Override
         public void run() {
             try{

@@ -60,7 +60,7 @@ public class AppClient extends Application {
         this.vBoxMessages = new VBox();
         this.panelCentral = new BorderPane();
         this.clientIHM = new ClientIHM(this);
-        Thread clientReader = this.clientIHM.creeClientReader();
+        this.clientIHM.creeClientReader();
         this.monMessage.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 this.envoyer.fire();

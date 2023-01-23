@@ -29,11 +29,8 @@ public class SessionIHM extends Thread {
             choisirNom(this.dis);
             this.serv.ajouterSession(this, nomClient);
             String str;
-            this.envoyerMessageClientDeServeur("");
-            this.envoyerMessageClientDeServeur("Vous devez tout d'abord choisir un salon /join nomSallon ou cliquer sur l'un des salons");
+            this.envoyerMessageClientDeServeur("Vous devez tout d'abord choisir un salon");
             this.envoyerMessageClientDeServeur("/help pour voir la liste des commandes");
-            this.envoyerMessageClientDeServeur("Voici la liste des salons:");
-            this.envoyerMessageClientDeServeur(this.serv.getListeSalon().toString());
             while(true){
                 str = (String)dis.readUTF();
                 if(str.length()>=1){
@@ -42,9 +39,7 @@ public class SessionIHM extends Thread {
                             this.envoyerMessageClientDeServeur(this.getListeCommande());
                         }
                         else if (str.equals("/quit")){
-                            if(this.salonActuelle == null){
-                                this.serv.removeSession(this.nomClient);
-                            }
+                            this.serv.removeUtilisateur(this);
                             this.dos.writeUTF("quit:tout");
                             this.dos.flush();
                             break;
@@ -192,15 +187,6 @@ public class SessionIHM extends Thread {
         }
     }
 
-    public void envoyerMessagePriveClient(String nomEnvoyer,String mes){
-        try {
-            this.dos.writeUTF("message:"+"Message privé de "+nomEnvoyer+" : "+mes);
-            this.dos.flush();
-        } catch (IOException ex) {
-            System.out.println("Error getting output stream: " + ex.getMessage());
-            ex.printStackTrace();
-        }
-    }
 
     public void envoyerListeSalonPourClient(){
         try {
@@ -249,10 +235,15 @@ public class SessionIHM extends Thread {
         return false;
     }
 
+    @Override
+    public int hashCode(){
+        return this.nomClient.hashCode();
+    }
+
 
     public String getListeCommande(){
         String res = "\n Voici la liste des commandes : \n";
-        res += "- /quit :Quitter le serveur \n";
+        res += "- /quit :Quitter l'application \n";
         res += "- /salon :Voir la liste des salons disponible \n";
         res += "- /join nomSalon :Rejoindre un salon ou cliquer sur un des salons \n";
         res += "- /nbuser :Connaitre le nombre de personnes enregistrés\n";
