@@ -56,7 +56,9 @@ public class AppClient extends Application {
 
     private ScrollPane scrollPaneUsers = new ScrollPane();
 
-    private Group group = new Group();
+    private Group groupSalon = new Group();
+
+    private Group groupUser = new Group();
 
 
     @Override
@@ -80,7 +82,7 @@ public class AppClient extends Application {
         this.monMessage.setPrefSize(500, 20);
         this.monMessage.setPromptText("Entrer votre message ici");
 
-        this.quitter.setOnAction(new ControleurBoutouQuitter(this.quitter, this.clientIHM, this));
+        this.quitter.setOnAction(new ControleurBoutonQuitter(this.quitter, this.clientIHM, this));
         }
         //vBoxMessages.heightProperty().addListener(null);}
         catch(ConnectException e){
@@ -94,7 +96,9 @@ public class AppClient extends Application {
     }
 
 
-
+    public Button getAfficheUser(){
+        return this.afficherUsers;
+    }
     public Button getAffichesalon(){
         return this.afficherSalon;
     }
@@ -110,41 +114,63 @@ public class AppClient extends Application {
             this.scrollPaneSallons.setId("scrollpaneSalon");
             this.scrollPaneSallons.setContent(this.vbSalonButtons);
             this.scrollPaneSallons.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-            Polygon trapeze = new Polygon();
-            trapeze.setFill(Color.rgb(64, 68, 75));
-            trapeze.getPoints().addAll(new Double[]{
+            Polygon trapezeSalon = new Polygon();
+            trapezeSalon.setFill(Color.rgb(64, 68, 75));
+            trapezeSalon.getPoints().addAll(new Double[]{
                 200.0, 125.0,
                 225.0, 150.0,
                 125.0, 150.0,
                 150.0, 125.0
             });
-            trapeze.setRotate(90);
+            trapezeSalon.setRotate(90);
             BorderPane bpLeft = new BorderPane();
             bpLeft.setCenter(this.scrollPaneSallons);
-            double centerX = (trapeze.getPoints().get(0) + trapeze.getPoints().get(2) + trapeze.getPoints().get(4) + trapeze.getPoints().get(6)) / 4;
-            double centerY = (trapeze.getPoints().get(1) + trapeze.getPoints().get(3) + trapeze.getPoints().get(5) + trapeze.getPoints().get(7)) / 4;
-            Text text = new Text(">");
+            double centerXSalon = (trapezeSalon.getPoints().get(0) + trapezeSalon.getPoints().get(2) + trapezeSalon.getPoints().get(4) + trapezeSalon.getPoints().get(6)) / 4;
+            double centerYSalon = (trapezeSalon.getPoints().get(1) + trapezeSalon.getPoints().get(3) + trapezeSalon.getPoints().get(5) + trapezeSalon.getPoints().get(7)) / 4;
+            Text textSalon = new Text(">");
 
-            text.setX(centerX);
-            text.setY(centerY+5);
-            text.setFont(Font.font(24));
-            text.setFill(Color.WHITE);
-            this.group.getChildren().add(trapeze);
-            this.group.getChildren().add(text);
-            this.group.setOnMouseClicked(new ControleTrapezeSalon(this, this.group));
-            bpLeft.setRight(this.group);
+            textSalon.setX(centerXSalon-5);
+            textSalon.setY(centerYSalon+5);
+            textSalon.setFont(Font.font(24));
+            textSalon.setFill(Color.WHITE);
+            this.groupSalon.getChildren().add(trapezeSalon);
+            this.groupSalon.getChildren().add(textSalon);
+            this.groupSalon.setOnMouseClicked(new ControleTrapezeSalon(this, this.groupSalon));
+            bpLeft.setRight(this.groupSalon);
             bpLeft.setPadding(new Insets(20));
-            bpLeft.setAlignment(this.group, Pos.CENTER);
+            bpLeft.setAlignment(this.groupSalon, Pos.CENTER);
             interface1.setLeft(bpLeft);
             HBox HbenvoyerRecevoir = new HBox();
             HbenvoyerRecevoir.getChildren().addAll(this.envoyer,this.monMessage);
             HbenvoyerRecevoir.setPadding(new Insets(10));
             interface1.setCenter(this.scrollPaneMessage);
             interface1.setBottom(HbenvoyerRecevoir);
-            BorderPane bpRight= new BorderPane();
+            Polygon trapezeUser = new Polygon();
+            trapezeUser.setFill(Color.rgb(64, 68, 75));
+            trapezeUser.getPoints().addAll(new Double[]{
+                200.0, 125.0,
+                225.0, 150.0,
+                125.0, 150.0,
+                150.0, 125.0
+            });
+            trapezeUser.setRotate(270);
+            BorderPane bpRight = new BorderPane();
             bpRight.setCenter(this.scrollPaneUsers);
-            bpRight.setLeft(this.afficherUsers);
-            //interface1.setRight(bpRight);
+            double centerXUser = (trapezeUser.getPoints().get(0) + trapezeUser.getPoints().get(2) + trapezeUser.getPoints().get(4) + trapezeUser.getPoints().get(6)) / 4;
+            double centerYUser = (trapezeUser.getPoints().get(1) + trapezeUser.getPoints().get(3) + trapezeUser.getPoints().get(5) + trapezeUser.getPoints().get(7)) / 4;
+            Text textUser = new Text("<");
+
+            textUser.setX(centerXUser-5);
+            textUser.setY(centerYUser+5);
+            textUser.setFont(Font.font(24));
+            textUser.setFill(Color.WHITE);
+            this.groupUser.getChildren().add(trapezeUser);
+            this.groupUser.getChildren().add(textUser);
+            this.groupUser.setOnMouseClicked(new ControleGroupeUser(this, this.groupUser));
+            bpRight.setRight(this.groupUser);
+            bpRight.setPadding(new Insets(20));
+            bpRight.setAlignment(this.groupUser, Pos.CENTER);
+            interface1.setRight(bpRight);
             HbenvoyerRecevoir.setAlignment(Pos.CENTER);
 
             BorderPane header = new BorderPane();
@@ -187,7 +213,7 @@ public class AppClient extends Application {
             @Override
             public void run() {
                 TextFlow textFlow = new TextFlow();
-                textFlow.setPrefWidth(650);
+                textFlow.setPrefWidth(400);
                 Text txt = new Text(message);
                 txt.setFill(Color.WHITE);
                 textFlow.getChildren().add(txt);
@@ -233,6 +259,10 @@ public class AppClient extends Application {
     }
     public void clearSalon(){
         this.vbSalonButtons.getChildren().clear();
+    }
+
+    public void clearUser(){
+        this.vbUsersButtons.getChildren().clear();
     }
 
     public void clearLesMessageEnCours(){

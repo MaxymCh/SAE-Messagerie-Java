@@ -26,11 +26,11 @@ public class ControleurBoutonAfficherUsers implements EventHandler<ActionEvent> 
 
     @Override
     public void handle(ActionEvent event) {
-        if (this.appClient.getSalon().getChildren().size()>0){
+        if (this.but.getText().equals("Cacher Salon")){
                         
             scrollPaneUsers.setVisible(false); 
             vbSalonUsers.setVisible(false);
-            this.appClient.clearSalon(); 
+            this.appClient.clearUser(); 
 
             this.but.setText("Afficher salon");
         }

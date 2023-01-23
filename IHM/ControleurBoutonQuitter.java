@@ -5,12 +5,12 @@ import javafx.scene.control.TextField;
 
 
 
-public class ControleurBoutouQuitter implements EventHandler<ActionEvent>  {
+public class ControleurBoutonQuitter implements EventHandler<ActionEvent>  {
 
     private Button boutonQuitter;
     private ClientIHM clientIHM;
     private AppClient appClient;
-    public ControleurBoutouQuitter(Button boutonQuitter, ClientIHM clientIHM, AppClient appClient) {
+    public ControleurBoutonQuitter(Button boutonQuitter, ClientIHM clientIHM, AppClient appClient) {
         this.boutonQuitter = boutonQuitter;
         this.clientIHM = clientIHM;
         this.appClient = appClient;

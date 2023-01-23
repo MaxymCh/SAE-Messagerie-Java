@@ -102,10 +102,7 @@ public class SessionIHM extends Thread {
                         }
 
                         else if(str.equals("/users")){
-                            String listeUser = this.serv.getListeClient();
-                            this.envoyerMessageClientDeServeur("La liste des clients actuellement connecté est "+listeUser);
-                            
-                            //this.envoyerListeUserPourClient();   
+                            this.envoyerListeUserPourClient();   
                         }
                         else{
                             this.envoyerMessageClientDeServeur("La commande est introuvable /help");
