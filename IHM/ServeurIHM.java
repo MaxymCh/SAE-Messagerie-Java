@@ -165,7 +165,7 @@ class ServeurIHM{
             sessionEnvoyer.envoyerMessageClientDeServeur("C'est vous !!!");
         }
         else if(!this.nomEstLibre(destinataire)){
-            String messagePourMoi = "MP à "+destinataire+" de Moi : "+message;
+            String messagePourMoi = "Message privé à "+destinataire+" de Moi : "+message;
             sessionEnvoyer.envoyerMessageClientDeServeur(messagePourMoi);
             SessionIHM clientDestinataire = this.dicoPseudoSession.get(destinataire);
             clientDestinataire.envoyerMessageClientDeServeur("Message privé de "+sessionEnvoyer.getNomClient()+" : "+message);

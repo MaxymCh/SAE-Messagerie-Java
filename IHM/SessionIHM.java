@@ -305,12 +305,15 @@ public class SessionIHM extends Thread {
     public String getListeCommande(){
         String res = "\n Voici la liste des commandes : \n";
         res += "- /quit :Quitter l'application \n";
-        res += "- /salon :Voir la liste des salons disponible \n";
         res += "- /join nomSalon :Rejoindre un salon ou cliquer sur un des salons \n";
         res += "- /nbuser :Connaitre le nombre de personnes enregistrés\n";
-        res += "- /users :Avoir la liste des personnes enregistrés \n";
-        res += "- /uptime :Connaitre depuis combien de temps le serveur est lancé \n";
+
+        res += "- /uptime :Connaitre depuis combien de temps le salon est lancé \n";
         res += "- @userName :Envoyé un message privé à userName \n";
+
+        res += "- /users : Bouton a droite pour afficher la liste des utilisateurs \n";
+        res += "- /salon : Bouton a gauche pour afficher la liste des salons \n";
+
         return res;
     }
 
