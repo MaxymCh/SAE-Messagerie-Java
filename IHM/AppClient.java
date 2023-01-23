@@ -264,6 +264,7 @@ public class AppClient extends Application {
 
     }
 
+
     private Scene laScene(){
         BorderPane fenetre = new BorderPane();
         fenetre.setCenter(this.panelCentral);
