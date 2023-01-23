@@ -35,7 +35,7 @@ public class ControleurBoutonAfficherSalon implements EventHandler<ActionEvent> 
             this.but.setText("Afficher salon");
         }
         else{
-            this.clientIHM.envoyerMessage("/salon");
+            this.clientIHM.demandeSalon();;
             this.but.setText("Cacher Salon");
             scrollPaneSallons.setTranslateX(-500);
             scrollPaneSallons.setVisible(true); // pour rendre la VBox visible
