@@ -46,6 +46,10 @@ class ServeurIHM{
         Boolean reussi = this.listeSalon.get(s.getSallonActuelle()).ajouterClient(s);
     }
 
+    public long getTempsCreationSalon(String nomSallon){
+        return this.listeSalon.get(nomSallon).getTempsDepuisCreation();
+    }
+
     public synchronized void retirerSalon(String nomSallon, SessionIHM membre){
         synchronized(this.listeSalon){
             if((this.listeSalon.containsKey(nomSallon))){

@@ -57,6 +57,7 @@ public class SessionIHM extends Thread {
                             }
                             
                         }
+                        
 
                         else if(str.length()>=5 && str.substring(0,5).equals("/join")){
                             try {
@@ -91,8 +92,12 @@ public class SessionIHM extends Thread {
                             
                         }
                         else if(str.equals("/uptime")){
-                            long tempsCreation = this.serv.getTempsDepuisCreation()/1000;
-                            this.envoyerMessageClientDeServeur("Le serveur est lancé depuis  "+String.valueOf(tempsCreation)+" secondes");
+                            if(this.salonActuelle != null){
+                                long tempsCreation = this.serv.getTempsCreationSalon(this.salonActuelle)/1000;
+                                this.envoyerMessageClientDeServeur("Le salon est lancé depuis  "+String.valueOf(tempsCreation)+" secondes");
+                            }
+                            
+                            
                             
                         }
 
