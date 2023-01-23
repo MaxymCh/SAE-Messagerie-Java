@@ -87,6 +87,9 @@ class ServeurIHM{
         synchronized(this.dicoPseudoSession){
             this.dicoPseudoSession.put(nom, s);
         }
+        for(String nomClient:this.dicoPseudoSession.keySet()){
+            this.dicoPseudoSession.get(nomClient).envoyerListeUserPourClient();
+        }
     }
 
     public void removeUtilisateur(SessionIHM utilisateur){
@@ -95,6 +98,9 @@ class ServeurIHM{
         }
         synchronized(this.dicoPseudoSession){
             this.dicoPseudoSession.remove(utilisateur.getNomClient());
+        }
+        for(String nomClient:this.dicoPseudoSession.keySet()){
+            this.dicoPseudoSession.get(nomClient).envoyerListeUserPourClient();
         }
     }
 

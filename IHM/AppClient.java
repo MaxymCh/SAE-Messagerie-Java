@@ -318,6 +318,12 @@ public class AppClient extends Application {
             @Override
             public void run() {
                 vbUsersButtons.getChildren().clear();
+                if(scrollPaneUsers.isVisible()){
+                    scrollPaneUsers.setVisible(false); 
+                    vbUsersButtons.setVisible(false);
+                    scrollPaneUsers.setVisible(true); 
+                    vbUsersButtons.setVisible(true);
+                }
                 for (String user : listeUsers) {
                     Button userButton = new Button(user);
                     userButton.setId("salon");
