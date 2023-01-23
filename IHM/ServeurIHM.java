@@ -139,6 +139,11 @@ class ServeurIHM{
         Set<String> ensembleClient = this.dicoPseudoSession.keySet();
         return ensembleClient.toString();
     }
+
+    public Set<String> getEnsembleClient(){
+        Set<String> ensembleClient = this.dicoPseudoSession.keySet();
+        return ensembleClient;
+    }
     
     public void envoyerMessageSallon(SessionIHM sessionEnvoyer,String message, String date){
         String messagePourMoi = date+ " de Moi : "+message;

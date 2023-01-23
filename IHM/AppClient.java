@@ -26,15 +26,19 @@ import java.net.ConnectException;
 
 public class AppClient extends Application {
 
-    private BorderPane panelCentral;
-    private Stage affichage;
+    private BorderPane panelCentral =  new BorderPane();
 
+    private Stage affichage;
 
     private ClientIHM clientIHM;
 
-    private VBox vBoxMessages;
+    private VBox vBoxMessages = new VBox();
 
-    private VBox vbSalonButtons;
+    private VBox vbSalonButtons = new VBox();
+
+    private VBox vbUsersButtons = new VBox();
+
+    private Label salonActuel = new Label("Vous étes dans : Accueil");
 
     private Button quitter = new Button("Quitter");
 
@@ -42,11 +46,15 @@ public class AppClient extends Application {
 
     private Button afficherSalon = new Button("Afficher salon");
 
+    private Button afficherUsers = new Button("Afficher salon");
+
     private TextField monMessage = new TextField();
 
     private ScrollPane scrollPaneMessage = new ScrollPane();
 
     private ScrollPane scrollPaneSallons = new ScrollPane();
+
+    private ScrollPane scrollPaneUsers = new ScrollPane();
 
     private Group group = new Group();
 
@@ -55,10 +63,8 @@ public class AppClient extends Application {
     public void init() {
         try{
         this.quitter.setId("Quitter");
-        this.vbSalonButtons = new VBox();
         this.scrollPaneSallons.setVisible(false);
-        this.vBoxMessages = new VBox();
-        this.panelCentral = new BorderPane();
+        this.scrollPaneUsers.setVisible(false);
         this.clientIHM = new ClientIHM(this);
         this.clientIHM.creeClientReader();
         this.monMessage.setOnKeyPressed(event -> {
@@ -66,6 +72,7 @@ public class AppClient extends Application {
                 this.envoyer.fire();
             }
         });
+        this.afficherUsers.setOnAction(new ControleurBoutonAfficherUsers(this, this.clientIHM, this.afficherUsers, this.vbUsersButtons, this.scrollPaneUsers));
         this.afficherSalon.setOnAction(new ControleurBoutonAfficherSalon(this, this.clientIHM, this.afficherSalon, this.vbSalonButtons, this.scrollPaneSallons));
         this.afficherSalon.setDisable(true);
         this.envoyer.setOnAction(new ControleurBoutonTFEnvoyer(this.monMessage, this.clientIHM, this));
@@ -92,6 +99,9 @@ public class AppClient extends Application {
         return this.afficherSalon;
     }
     private BorderPane fenetreMessagerie(){
+            this.scrollPaneUsers.setId("scrollpaneSalon");
+            this.scrollPaneUsers.setContent(this.vbUsersButtons);
+            this.scrollPaneUsers.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
             this.scrollPaneMessage.setContent(this.vBoxMessages);
             this.scrollPaneMessage.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -111,7 +121,6 @@ public class AppClient extends Application {
             trapeze.setRotate(90);
             BorderPane bpLeft = new BorderPane();
             bpLeft.setCenter(this.scrollPaneSallons);
-            //bpLeft.setRight(this.afficherSalon);
             double centerX = (trapeze.getPoints().get(0) + trapeze.getPoints().get(2) + trapeze.getPoints().get(4) + trapeze.getPoints().get(6)) / 4;
             double centerY = (trapeze.getPoints().get(1) + trapeze.getPoints().get(3) + trapeze.getPoints().get(5) + trapeze.getPoints().get(7)) / 4;
             Text text = new Text(">");
@@ -124,6 +133,7 @@ public class AppClient extends Application {
             this.group.getChildren().add(text);
             this.group.setOnMouseClicked(new ControleTrapezeSalon(this, this.group));
             bpLeft.setRight(this.group);
+            bpLeft.setPadding(new Insets(20));
             bpLeft.setAlignment(this.group, Pos.CENTER);
             interface1.setLeft(bpLeft);
             HBox HbenvoyerRecevoir = new HBox();
@@ -131,6 +141,10 @@ public class AppClient extends Application {
             HbenvoyerRecevoir.setPadding(new Insets(10));
             interface1.setCenter(this.scrollPaneMessage);
             interface1.setBottom(HbenvoyerRecevoir);
+            BorderPane bpRight= new BorderPane();
+            bpRight.setCenter(this.scrollPaneUsers);
+            bpRight.setLeft(this.afficherUsers);
+            //interface1.setRight(bpRight);
             HbenvoyerRecevoir.setAlignment(Pos.CENTER);
 
             BorderPane header = new BorderPane();
@@ -138,8 +152,9 @@ public class AppClient extends Application {
 
             Label titre = new Label("DISCOURD");
             header.setCenter(titre);
-
-
+            header.setBottom(this.salonActuel);
+            header.setPadding(new Insets(20));
+            //header.setAlignment(salonActuel, Pos.CENTER);
             interface1.setTop(header);
             return interface1;
         }
@@ -188,6 +203,9 @@ public class AppClient extends Application {
         });
     }
 
+    public void setTI(String texte){
+        this.monMessage.setText(texte);
+    }
 
     public void clearTFMessage() {
         this.monMessage.clear();
@@ -206,6 +224,12 @@ public class AppClient extends Application {
     }
     public VBox getSalon(){
         return this.vbSalonButtons;
+    }
+    public Label getLabSalonActuel(){
+        return this.salonActuel;
+    }
+    public void setSalonActuel(String nom){
+        this.salonActuel.setText(nom);
     }
     public void clearSalon(){
         this.vbSalonButtons.getChildren().clear();
@@ -250,6 +274,28 @@ public class AppClient extends Application {
                 vbSalonButtons.setSpacing(30);
                 vbSalonButtons.setPadding(new Insets(20));
                 //salonButtons.setPrefHeight(50);
+            }
+        });
+        
+
+    }
+
+    public void majUser(List<String> listeUsers){
+        AppClient appCl = this;
+        VBox vbUsersButtons = this.vbUsersButtons;
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                vbUsersButtons.getChildren().clear();
+                for (String user : listeUsers) {
+                    Button userButton = new Button(user);
+                    userButton.setId("salon");
+                    userButton.setOnAction(new ControleurBoutonUsers(userButton, appCl));
+                    vbUsersButtons.getChildren().add(userButton);
+                }
+                vbUsersButtons.setSpacing(30);
+                vbUsersButtons.setPadding(new Insets(20));
             }
         });
         
