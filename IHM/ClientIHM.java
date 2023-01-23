@@ -53,7 +53,21 @@ public class ClientIHM{
 
     public void envoyerMessage(String message){
         try{
-            dout.writeUTF(message);
+            if(message.equals("/salon")){
+                this.appClient.ajouterMessage("Veuillez cliquer sur le bouton a gauche");
+            }
+            else{
+                dout.writeUTF(message);
+                dout.flush();
+            }
+
+        }
+        catch(Exception e){System.out.println(e);}
+    }
+
+    public void demandeSalon(){
+        try{
+            dout.writeUTF("/salon");
             dout.flush();
 
         }
