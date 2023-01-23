@@ -60,6 +60,9 @@ class ServeurIHM{
                 
             }
         }
+        for(String nomClient:this.dicoPseudoSession.keySet()){
+            this.dicoPseudoSession.get(nomClient).envoyerListeSalonPourClient();
+        }
 
         
     }
@@ -69,6 +72,9 @@ class ServeurIHM{
             if(!this.listeSalon.containsKey(nomSallon)){
                 this.listeSalon.put(nomSallon, new Salon(nomSallon));
             }
+        }
+        for(String nomClient:this.dicoPseudoSession.keySet()){
+            this.dicoPseudoSession.get(nomClient).envoyerListeSalonPourClient();
         }
         
     }

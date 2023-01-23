@@ -228,10 +228,18 @@ public class AppClient extends Application {
     public void majSalon(List<String> listeSalon){
         AppClient appCl = this;
         VBox vbSalonButtons = this.vbSalonButtons;
+        
 
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+                if(scrollPaneSallons.isVisible()){
+                    scrollPaneSallons.setVisible(false); 
+                    vbSalonButtons.setVisible(false);
+                    scrollPaneSallons.setVisible(true); 
+                    vbSalonButtons.setVisible(true);
+                }
+                
                 vbSalonButtons.getChildren().clear();
                 for (String salon : listeSalon) {
                     Button salonButton = new Button(salon);

@@ -43,6 +43,7 @@ public class ClientReaderIHM implements Runnable{
                     }
                     else if(entete.equals("listeSalon")){
                         this.listeSalon = new ArrayList<>(Arrays.asList(contenu.replace(" ", "").split(",")));
+                        System.out.println(listeSalon);
                         this.appClient.majSalon(this.listeSalon);
                     }
 
