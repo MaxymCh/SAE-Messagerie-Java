@@ -36,6 +36,8 @@ public class AppClient extends Application {
 
     private VBox vbSalonButtons;
 
+    private Label salonActuel = new Label("Vous étes dans : Accueil");
+
     private Button quitter = new Button("Quitter");
 
 	private Button envoyer = new Button("Envoyer");
@@ -124,6 +126,7 @@ public class AppClient extends Application {
             this.group.getChildren().add(text);
             this.group.setOnMouseClicked(new ControleTrapezeSalon(this, this.group));
             bpLeft.setRight(this.group);
+            bpLeft.setPadding(new Insets(20));
             bpLeft.setAlignment(this.group, Pos.CENTER);
             interface1.setLeft(bpLeft);
             HBox HbenvoyerRecevoir = new HBox();
@@ -138,8 +141,9 @@ public class AppClient extends Application {
 
             Label titre = new Label("DISCOURD");
             header.setCenter(titre);
-
-
+            header.setBottom(this.salonActuel);
+            header.setPadding(new Insets(20));
+            //header.setAlignment(salonActuel, Pos.CENTER);
             interface1.setTop(header);
             return interface1;
         }
@@ -206,6 +210,12 @@ public class AppClient extends Application {
     }
     public VBox getSalon(){
         return this.vbSalonButtons;
+    }
+    public Label getLabSalonActuel(){
+        return this.salonActuel;
+    }
+    public void setSalonActuel(String nom){
+        this.salonActuel.setText(nom);
     }
     public void clearSalon(){
         this.vbSalonButtons.getChildren().clear();
