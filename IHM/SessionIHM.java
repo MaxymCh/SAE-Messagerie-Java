@@ -213,7 +213,7 @@ public class SessionIHM extends Thread {
 
     public void envoyerListeUserPourClient(){
         try {
-            Set<String> listeUsers = this.serv.getListeClient();
+            Set<String> listeUsers = this.serv.getEnsembleClient();
             String strListeUsers = listeUsers.toString();
             strListeUsers = strListeUsers.substring(1,strListeUsers.length()-1);
             this.dos.writeUTF("listeUsers:"+strListeUsers);
