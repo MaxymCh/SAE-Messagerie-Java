@@ -19,7 +19,6 @@ public class ClientIHM{
     private Thread cr;
 
     private AppClient appClient;
-
     
 
     public ClientIHM(AppClient appClient) throws ConnectException{
@@ -67,16 +66,7 @@ public class ClientIHM{
     
 
 
-    public void quitter(){
-        cr.stop_thread();
-        try{
-            this.dout.close();
-            this.s.close();
-            Thread.sleep(1000);
-        }
-        catch(Exception e){System.out.println(e);}
-        
-    }
+
 
 
         public void choisirNom(){

@@ -19,7 +19,6 @@ public class ClientReaderIHM implements Runnable{
     public ClientReaderIHM( ClientIHM clientIHM, Socket socket, AppClient appClient){
         this.clientIHM = clientIHM;
         this.socket = socket;
-        this.clientLance = true;
         this.appClient = appClient;
 
     }
@@ -34,30 +33,22 @@ public class ClientReaderIHM implements Runnable{
         public void run() {
             try{
                 DataInputStream dis = new DataInputStream(socket.getInputStream());
-                String mes;
-                while(clientLance){
-                    mes = dis.readUTF();
-    
-                    if(mes.equals("true")){
-                        mes = dis.readUTF();
-                        clientIHM.setNomClient(mes);
-                        appClient.activeButtonAffiche();
-                        //mes = dis.readUTF();
-                        //appClient.setListSalon(mes);
-                        break;
-                    }
-                    else{
-                        appClient.ajouterMessage(mes);
-                        System.out.println(mes);
-                    }               
-                }
-               
-                while(clientLance){
+                String mes;            
+                while(true){
                     mes = dis.readUTF();
                     String[] messagePlusieursPartie = mes.split(":", 2);
                     String entete = messagePlusieursPartie[0];
                     String contenu = messagePlusieursPartie[1];
+                    System.out.println(entete+"  "+contenu);
                     if(entete.equals("message")){appClient.ajouterMessage(contenu);}
+                    else if (entete.equals("name")){
+                        if (contenu.equals("true")){
+                            mes = dis.readUTF();
+                            clientIHM.setNomClient(mes);
+                            appClient.activeButtonAffiche();
+                        }
+                        
+                    }
                     else if(entete.equals("listeSalon")){
                         this.listeSalon = new ArrayList<>(Arrays.asList(contenu.replace(" ", "").split(",")));
                         this.appClient.majSalon(this.listeSalon);
@@ -69,6 +60,14 @@ public class ClientReaderIHM implements Runnable{
                         System.out.println(this.messageActuelleDansSalon);
                         this.appClient.majMessage(this.messageActuelleDansSalon);
 
+                    }
+
+                    else if(entete.equals("quit")){
+                        if (contenu.equals("tout")){
+                            this.appClient.quitterApp();
+                            break;
+                            
+                        }
                     }
                                         
                 }

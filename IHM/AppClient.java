@@ -71,8 +71,10 @@ public class AppClient extends Application {
         this.envoyer.setOnAction(new ControleurBoutonTFEnvoyer(this.monMessage, this.clientIHM, this));
         this.monMessage.setId("inputBox" );
         this.monMessage.setPrefSize(500, 20);
-        this.monMessage.setPromptText("Entrer votre message ici");}
+        this.monMessage.setPromptText("Entrer votre message ici");
 
+        this.quitter.setOnAction(new ControleurBoutouQuitter(this.quitter, this.clientIHM, this));
+        }
         //vBoxMessages.heightProperty().addListener(null);}
         catch(ConnectException e){
             System.out.println(e);
@@ -80,53 +82,67 @@ public class AppClient extends Application {
 
         
     }
+    public void quitterApp(){
+        Platform.exit();
+    }
 
-public Button getAffichesalon(){
-    return this.afficherSalon;
-}
-private BorderPane fenetreMessagerie(){
 
-        this.scrollPaneMessage.setContent(this.vBoxMessages);
-        this.scrollPaneMessage.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
-        BorderPane interface1 = new BorderPane();
-        this.scrollPaneSallons.setId("scrollpaneSalon");
-        this.scrollPaneSallons.setContent(this.vbSalonButtons);
-        this.scrollPaneSallons.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        Polygon trapeze = new Polygon();
-        trapeze.setFill(Color.rgb(64, 68, 75));
-        trapeze.getPoints().addAll(new Double[]{
-            200.0, 125.0,
-            225.0, 150.0,
-            125.0, 150.0,
-            150.0, 125.0
-        });
-        trapeze.setRotate(90);
-        BorderPane bpLeft = new BorderPane();
-        bpLeft.setCenter(this.scrollPaneSallons);
-        //bpLeft.setRight(this.afficherSalon);
-        double centerX = (trapeze.getPoints().get(0) + trapeze.getPoints().get(2) + trapeze.getPoints().get(4) + trapeze.getPoints().get(6)) / 4;
-        double centerY = (trapeze.getPoints().get(1) + trapeze.getPoints().get(3) + trapeze.getPoints().get(5) + trapeze.getPoints().get(7)) / 4;
-        Text text = new Text(">");
+    public Button getAffichesalon(){
+        return this.afficherSalon;
+    }
+    private BorderPane fenetreMessagerie(){
 
-        text.setX(centerX);
-        text.setY(centerY+5);
-        text.setFont(Font.font(24));
-        text.setFill(Color.WHITE);
-        this.group.getChildren().add(trapeze);
-        this.group.getChildren().add(text);
-        this.group.setOnMouseClicked(new ControleTrapezeSalon(this, this.group));
-        bpLeft.setRight(this.group);
-        bpLeft.setAlignment(this.group, Pos.CENTER);
-        interface1.setLeft(bpLeft);
-        HBox HbenvoyerRecevoir = new HBox();
-        HbenvoyerRecevoir.getChildren().addAll(this.envoyer,this.monMessage);
-        HbenvoyerRecevoir.setPadding(new Insets(10));
-        interface1.setCenter(this.scrollPaneMessage);
-        interface1.setBottom(HbenvoyerRecevoir);
-        HbenvoyerRecevoir.setAlignment(Pos.CENTER);
-        return interface1;
-     }
+            this.scrollPaneMessage.setContent(this.vBoxMessages);
+            this.scrollPaneMessage.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
+            BorderPane interface1 = new BorderPane();
+            this.scrollPaneSallons.setId("scrollpaneSalon");
+            this.scrollPaneSallons.setContent(this.vbSalonButtons);
+            this.scrollPaneSallons.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+            Polygon trapeze = new Polygon();
+            trapeze.setFill(Color.rgb(64, 68, 75));
+            trapeze.getPoints().addAll(new Double[]{
+                200.0, 125.0,
+                225.0, 150.0,
+                125.0, 150.0,
+                150.0, 125.0
+            });
+            trapeze.setRotate(90);
+            BorderPane bpLeft = new BorderPane();
+            bpLeft.setCenter(this.scrollPaneSallons);
+            //bpLeft.setRight(this.afficherSalon);
+            double centerX = (trapeze.getPoints().get(0) + trapeze.getPoints().get(2) + trapeze.getPoints().get(4) + trapeze.getPoints().get(6)) / 4;
+            double centerY = (trapeze.getPoints().get(1) + trapeze.getPoints().get(3) + trapeze.getPoints().get(5) + trapeze.getPoints().get(7)) / 4;
+            Text text = new Text(">");
+
+            text.setX(centerX);
+            text.setY(centerY+5);
+            text.setFont(Font.font(24));
+            text.setFill(Color.WHITE);
+            this.group.getChildren().add(trapeze);
+            this.group.getChildren().add(text);
+            this.group.setOnMouseClicked(new ControleTrapezeSalon(this, this.group));
+            bpLeft.setRight(this.group);
+            bpLeft.setAlignment(this.group, Pos.CENTER);
+            interface1.setLeft(bpLeft);
+            HBox HbenvoyerRecevoir = new HBox();
+            HbenvoyerRecevoir.getChildren().addAll(this.envoyer,this.monMessage);
+            HbenvoyerRecevoir.setPadding(new Insets(10));
+            interface1.setCenter(this.scrollPaneMessage);
+            interface1.setBottom(HbenvoyerRecevoir);
+            HbenvoyerRecevoir.setAlignment(Pos.CENTER);
+
+            BorderPane header = new BorderPane();
+            header.setRight(this.quitter);
+
+            Label titre = new Label("DISCOURD");
+            header.setCenter(titre);
+
+
+            interface1.setTop(header);
+            return interface1;
+        }
 
      public void modeMessagerie(){
         this.panelCentral.setCenter(this.fenetreMessagerie());
@@ -242,20 +258,13 @@ private BorderPane fenetreMessagerie(){
 
     private Scene laScene(){
         BorderPane fenetre = new BorderPane();
-        HBox hbTop = new HBox();
-        Label titre = new Label("DISCOURD");
-        hbTop.setPadding(new Insets(10));
-        hbTop.getChildren().add(this.quitter);
-        hbTop.getChildren().add(titre);
-
-
-        fenetre.setTop(hbTop);
         fenetre.setCenter(this.panelCentral);
         Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
         fenetre.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
         int height = (int) dimension.getHeight()/2;
-        int width = (int) dimension.getWidth()/2; 
-        HBox.setMargin(quitter,new Insets(0,width/3,0,0));
+        int width = (int) dimension.getWidth()/2;
+
+
         return new  Scene(fenetre,width,height);
     }
 

@@ -25,8 +25,7 @@ public class SessionIHM extends Thread {
         try{
             this.dis = new DataInputStream(this.sock.getInputStream());
             this.dos = new DataOutputStream(this.sock.getOutputStream());
-            this.dos.writeUTF("Bienvenue dans notre messagerie");
-            this.dos.flush();
+            this.envoyerMessageClientDeServeur("Bienvenue dans notre messagerie");
             choisirNom(this.dis);
             this.serv.ajouterSession(this, nomClient);
             String str;
@@ -43,11 +42,11 @@ public class SessionIHM extends Thread {
                             this.envoyerMessageClientDeServeur(this.getListeCommande());
                         }
                         else if (str.equals("/quit")){
-                            this.envoyerMessageClientDeServeur("Merci et à bientot");
-                            this.serv.removeSession(this.nomClient);
-                            if(this.salonActuelle!=null){
-                                this.serv.retirerClientSalon(this);
+                            if(this.salonActuelle == null){
+                                this.serv.removeSession(this.nomClient);
                             }
+                            this.dos.writeUTF("quit:tout");
+                            this.dos.flush();
                             break;
                         }
                         
@@ -132,32 +131,34 @@ public class SessionIHM extends Thread {
     public void choisirNom(DataInputStream dis){
         try{
         
-        Boolean nomValide = false;
-        while(! nomValide){
-            this.dos.writeUTF("Donner moi votre nom !");
-            this.dos.flush();
-            String nomChoisi = this.dis.readUTF();
-            if(this.serv.nomEstLibre(nomChoisi)){
-                nomValide = true;
-                this.dos.writeUTF("true");
-                this.dos.flush();
-                this.dos.writeUTF(nomChoisi);
-                this.dos.flush();
-                //this.dos.writeUTF(this.serv.getListeSalon().toString());
-                //this.dos.flush();
-                this.dos.writeUTF("message:"+nomChoisi+"!!! Ca sonne bien !");
-                this.dos.flush();
-                this.nomClient = nomChoisi;
-            }
-            
-            else{
-                this.dos.writeUTF("message:"+"Malheureusement "+nomChoisi+" est déjà utilisé ");
-                this.dos.flush();
+            Boolean nomValide = false;
+            while(!nomValide){
+                this.envoyerMessageClientDeServeur("Donner moi votre nom !");
+                
+                String nomChoisi = this.dis.readUTF();
+                if (nomChoisi.substring(0, 1).equals("/")){
+                    if (nomChoisi.equals("/quit")){
+                        this.envoyerMessageClientDeServeur("tout", "quit");
+                    }
+                    else{
+                        this.envoyerMessageClientDeServeur("Nom invalide");
+                    }
+                }
+                else if(this.serv.nomEstLibre(nomChoisi)){
+                    nomValide = true;
+                    this.envoyerMessageClientDeServeur("true", "name");
+                    this.envoyerMessageClientDeServeur(nomChoisi);
+                    this.envoyerMessageClientDeServeur(nomChoisi+"!!! Ca sonne bien !");
+                    this.nomClient = nomChoisi;
+                }
+                
+                else{
+                    this.envoyerMessageClientDeServeur("Malheureusement "+nomChoisi+" est déjà utilisé ");
+                }
             }
         }
+        catch(Exception e){System.out.println(e);}
     }
-    catch(Exception e){System.out.println(e);}
-}
 
 
     public String getSallonActuelle(){
@@ -168,9 +169,22 @@ public class SessionIHM extends Thread {
         this.salonActuelle = nouveauSallon;
     }
 
+
     public void envoyerMessageClientDeServeur(String mes){
-        try {
+        try {                
             this.dos.writeUTF("message:"+mes);
+            this.dos.flush();
+            
+        }
+         catch (IOException ex) {
+            System.out.println("Error getting output stream: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+    }
+
+    public void envoyerMessageClientDeServeur(String message, String entete){
+        try {
+            this.dos.writeUTF(entete+":"+message);
             this.dos.flush();
         } catch (IOException ex) {
             System.out.println("Error getting output stream: " + ex.getMessage());
