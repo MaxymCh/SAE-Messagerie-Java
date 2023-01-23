@@ -54,6 +54,10 @@ public class Salon {
         return this.nomSalon;
     }
 
+    public boolean estPresent(SessionIHM membre){
+        return this.listeMembre.contains(membre);
+    }
+
     public void envoyerMessageATous(SessionIHM sessionEnvoyeur, String date, String message){
         for(SessionIHM membre : this.listeMembre){
             if(!membre.equals(sessionEnvoyeur)){

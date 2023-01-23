@@ -64,6 +64,15 @@ public class SessionIHM extends Thread {
                                 this.envoyerMessageClientDeServeur("La commande est invalide \n Pour rappel /join Salon4 pour rejoindre le salon Salon4");
                             }
                         }
+
+                        else if(str.length()>=3 && str.substring(0,5).equals("/join")){
+                            try {
+                                String nomSalon =str.split(" ")[1];
+                                this.serv.changerSalon(this, nomSalon);
+                            } catch (Exception e) {
+                                this.envoyerMessageClientDeServeur("La commande est invalide \n Pour rappel /join Salon4 pour rejoindre le salon Salon4");
+                            }
+                        }
                         
                         else if(str.equals("/nbuser")){
                             int nombreUser = this.serv.getNombreUser();

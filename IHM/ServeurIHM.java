@@ -46,10 +46,17 @@ class ServeurIHM{
         Boolean reussi = this.listeSalon.get(s.getSallonActuelle()).ajouterClient(s);
     }
 
-    public synchronized void retirerSalon(String nomSallon){
+    public synchronized void retirerSalon(String nomSallon, SessionIHM membre){
         synchronized(this.listeSalon){
-            if((this.listeSalon.containsKey(nomSallon)) && this.listeSalon.get(nomSallon).getNombreMembre() == 0){
-                this.listeSalon.remove(nomSallon);
+            if((this.listeSalon.containsKey(nomSallon))){
+                Salon salon = this.listeSalon.get(nomSallon);
+                if(salon.getNombreMembre() == 0){
+                    this.listeSalon.remove(nomSallon);
+                }
+                else if(salon.getNombreMembre() == 1 && salon.estPresent(membre)){
+                    this.listeSalon.remove(nomSallon);
+                }
+                
             }
         }
 
