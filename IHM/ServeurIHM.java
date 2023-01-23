@@ -54,6 +54,7 @@ class ServeurIHM{
                     this.listeSalon.remove(nomSallon);
                 }
                 else if(salon.getNombreMembre() == 1 && salon.estPresent(membre)){
+                    salon.retirerClient(membre);
                     this.listeSalon.remove(nomSallon);
                 }
                 

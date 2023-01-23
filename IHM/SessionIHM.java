@@ -2,9 +2,11 @@ import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -65,12 +67,21 @@ public class SessionIHM extends Thread {
                             }
                         }
 
-                        else if(str.length()>=3 && str.substring(0,5).equals("/join")){
+                        else if(str.length()>=3 && str.substring(0,4).equals("/add")){
                             try {
                                 String nomSalon =str.split(" ")[1];
-                                this.serv.changerSalon(this, nomSalon);
+                                this.serv.ajouterSalon(nomSalon);
                             } catch (Exception e) {
-                                this.envoyerMessageClientDeServeur("La commande est invalide \n Pour rappel /join Salon4 pour rejoindre le salon Salon4");
+                                this.envoyerMessageClientDeServeur("La commande est invalide");
+                            }
+                        }
+
+                        else if(str.length()>=3 && str.substring(0,4).equals("/sup")){
+                            try {
+                                String nomSalon =str.split(" ")[1];
+                                this.serv.retirerSalon(nomSalon, this);
+                            } catch (Exception e) {
+                                this.envoyerMessageClientDeServeur("La commande est invalide");
                             }
                         }
                         
@@ -199,10 +210,35 @@ public class SessionIHM extends Thread {
 
     public void envoyerListeSalonPourClient(){
         try {
+
+            Comparator<String> salonComparator = new Comparator<String>() {
+                @Override
+                public int compare(String s1, String s2) {
+                    if (s1.startsWith("Salon") && s2.startsWith("Salon")) {
+                        // Extraction des numéros de salon
+                        try{
+                            int num1 = Integer.parseInt(s1.replaceAll("\\D", ""));
+                        int num2 = Integer.parseInt(s2.replaceAll("\\D", ""));
+                        return Integer.compare(num1, num2);
+                        }
+                        catch(NumberFormatException e){
+                            return s1.compareTo(s2);
+                        }
+                        
+                    } else {
+                        return s1.compareTo(s2);
+                    }
+                }
+            };
+
+            
+            
             Set<String> listeSalon = this.serv.getListeSalon();
-            String strListeSalon = listeSalon.toString();
-            strListeSalon = strListeSalon.substring(1,strListeSalon.length()-1);
-            this.dos.writeUTF("listeSalon:"+strListeSalon);
+            TreeSet<String> sortedSet = new TreeSet<>(salonComparator);
+            sortedSet.addAll(listeSalon);
+            String sortedSalon = String.join(", ", sortedSet);
+            /*strListeSalon = strListeSalon.substring(1,strListeSalon.length()-1);*/
+            this.dos.writeUTF("listeSalon:"+sortedSalon);
             this.dos.flush();
         } catch (IOException ex) {
             System.out.println("Error getting output stream: " + ex.getMessage());
