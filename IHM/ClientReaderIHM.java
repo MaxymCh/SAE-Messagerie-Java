@@ -12,6 +12,8 @@ public class ClientReaderIHM implements Runnable{
 
     private AppClient appClient;
     private List<String> listeSalon;
+
+    private List<String> listeUsers;
     
     private List<String> messageActuelleDansSalon;
 
@@ -44,6 +46,10 @@ public class ClientReaderIHM implements Runnable{
                     else if(entete.equals("listeSalon")){
                         this.listeSalon = new ArrayList<>(Arrays.asList(contenu.replace(" ", "").split(",")));
                         this.appClient.majSalon(this.listeSalon);
+                    }
+                    else if(entete.equals("listeUsers")){
+                        this.listeUsers= new ArrayList<>(Arrays.asList(contenu.replace(" ", "").split(",")));
+                        this.appClient.majUser(this.listeUsers);
                     }
 
                     else if(entete.equals("listeMessages")){

@@ -89,6 +89,7 @@ public class SessionIHM extends Thread {
                             String listeUser = this.serv.getListeClient();
                             this.envoyerMessageClientDeServeur("La liste des clients actuellement connecté est "+listeUser);
                             
+                            //this.envoyerListeUserPourClient();   
                         }
                         else{
                             this.envoyerMessageClientDeServeur("La commande est introuvable /help");
@@ -203,6 +204,19 @@ public class SessionIHM extends Thread {
             String strListeSalon = listeSalon.toString();
             strListeSalon = strListeSalon.substring(1,strListeSalon.length()-1);
             this.dos.writeUTF("listeSalon:"+strListeSalon);
+            this.dos.flush();
+        } catch (IOException ex) {
+            System.out.println("Error getting output stream: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+    }
+
+    public void envoyerListeUserPourClient(){
+        try {
+            Set<String> listeUsers = this.serv.getListeClient();
+            String strListeUsers = listeUsers.toString();
+            strListeUsers = strListeUsers.substring(1,strListeUsers.length()-1);
+            this.dos.writeUTF("listeUsers:"+strListeUsers);
             this.dos.flush();
         } catch (IOException ex) {
             System.out.println("Error getting output stream: " + ex.getMessage());
